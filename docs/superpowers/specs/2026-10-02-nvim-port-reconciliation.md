@@ -112,3 +112,20 @@ queries on the runtimepath. It ended with DISAGREEMENT on one point.
 ### Result
 
 22 of 6985 characters differ, 0 unexplained runs, 5 known-difference runs.
+
+## Round 3
+
+Codex re-ran its Python call fixture (twelve calls including `Exception()`,
+`Warning()`, `CustomError()`, `CustomException()`, `CustomWarning()` and
+`memoryview()`) against the port with the screen inspector: 0 of 137
+characters differ. It re-ran the nine samples: 22 of 6985 characters differ,
+0 unexplained runs, 5 known-difference runs. Its report is
+`docs/superpowers/specs/2026-10-02-nvim-port-codex-round3.md` in its worktree
+and ends with the agreement line.
+
+## Outcome
+
+Both ports agree the Neovim port is one-to-one with the theme for every token
+the nine samples exercise, except the five listed known differences: three
+LuaDoc tokens that need the luadoc parser installed, and two tokens in a
+Python raw string that VS Code treats as a regular expression.
