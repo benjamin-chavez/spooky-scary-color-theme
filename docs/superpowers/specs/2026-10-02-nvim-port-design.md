@@ -243,3 +243,25 @@ each round's agreed and rejected changes.
   messages.
 - Manual: open each sample in the author's real Neovim config and compare to
   the VS Code screenshot from `screenshot.sh`.
+
+## Amendment, 2026-10-02: query extensions
+
+The first harness run showed that about a third of all characters differed for
+reasons no highlight group can fix: string quote marks are punctuation in every
+TextMate grammar but part of the string node in treesitter, variables inside
+blocks take `#d8d8d8` from the `meta.block variable.other` rule, round and
+square brackets are `meta.brace` with no color while braces are punctuation,
+and Markdown prose is `#EEFFFF` while treesitter gives it no capture.
+
+The port therefore ships `queries/<lang>/highlights.scm` files that start with
+`;; extends` and add captures for exactly those cases. Capture names are chosen
+so that another colorscheme sees no change: `@punctuation.delimiter.string`
+falls back to `@punctuation.delimiter`, `@variable.block` to `@variable`,
+`@punctuation.bracket.round` to `@punctuation.bracket`, `@markup.plain` to
+`@markup`, which nothing defines. The one exception considered and rejected is
+CSS `(plain_value)`, which has no base capture at all, so any new capture would
+recolor other themes; it stays a known difference.
+
+The TypeScript base query loads after the ecma extension and re-captures
+capitalized identifiers, so `queries/typescript/highlights.scm` repeats the
+identifier rules from `queries/ecma/highlights.scm`.

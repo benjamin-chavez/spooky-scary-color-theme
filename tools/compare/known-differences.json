@@ -1,1 +1,359 @@
-[]
+[
+  {
+    "sample": "sample.css",
+    "vscode": "#a361ff",
+    "nvim": "#fca03f",
+    "text": "^(utf-8|\\d+%)$",
+    "reason": "The css grammar leaves @charset strings and keyframe percentage selectors unscoped; treesitter captures them as strings and numbers."
+  },
+  {
+    "sample": "sample.css",
+    "vscode": "#a361ff",
+    "nvim": "#afafaf",
+    "text": "^\"$",
+    "reason": "Quotes of the unscoped @charset string. Follows the entry above."
+  },
+  {
+    "sample": "sample.css",
+    "vscode": "#fca03f",
+    "nvim": "#a361ff",
+    "text": "^(sans-serif|uppercase|portrait|none)$",
+    "reason": "Plain property values are support.constant.property-value in TextMate. nvim-treesitter gives (plain_value) no capture, and adding one would recolor every other colorscheme that has these queries on its runtimepath."
+  },
+  {
+    "sample": "sample.css",
+    "vscode": "#fca03f",
+    "nvim": "#90f078",
+    "text": "^flicker$",
+    "reason": "Keyframe names are variable.parameter.keyframe-list in TextMate. The css query captures them with the same @variable as custom properties, which the theme paints green."
+  },
+  {
+    "sample": "sample.html",
+    "vscode": "#afafaf",
+    "nvim": "#fca03f",
+    "text": "^[&;]$",
+    "reason": "Entity punctuation. The html query captures the whole &amp; reference as one @character.special node."
+  },
+  {
+    "sample": "sample.html",
+    "vscode": "#fca03f italic",
+    "nvim": "#90f078",
+    "text": "^html$",
+    "reason": "The doctype is one (doctype) node in tree-sitter-html. TextMate splits DOCTYPE from the html attribute."
+  },
+  {
+    "sample": "sample.html",
+    "vscode": "#90f078",
+    "nvim": "#894fe0 italic",
+    "text": "^document$",
+    "reason": "The ecma query marks document, window and console as @variable.builtin alongside this. TextMate scopes only this and super as variable.language."
+  },
+  {
+    "sample": "sample.js",
+    "vscode": "#fca03f",
+    "nvim": "#89ddff",
+    "text": "^gi$",
+    "reason": "Regex flags are keyword.other in TextMate. tree-sitter-javascript captures the whole literal including flags as @string.regexp."
+  },
+  {
+    "sample": "sample.js",
+    "vscode": "#a361ff",
+    "nvim": "#d8d8d8",
+    "text": "^length$",
+    "reason": "Known DOM properties are support.variable.property in TextMate, which no rule colors. Treesitter cannot tell length from a user property."
+  },
+  {
+    "sample": "sample.js",
+    "vscode": "#d8d8d8",
+    "nvim": "#d8d8d8 italic",
+    "text": "^console$",
+    "reason": "The ecma query marks console as @variable.builtin, which adds the variable.language italic. Color matches."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#90f078",
+    "nvim": "#894fe0 italic",
+    "text": "^console$",
+    "reason": "Same console heuristic inside a fenced JavaScript block."
+  },
+  {
+    "sample": "sample.json",
+    "vscode": "#90f078",
+    "nvim": "#c792ea",
+    "text": "^(level|deeper)$",
+    "reason": "JSON Key Level 1 color. TextMate colors keys by nesting depth; treesitter has one @property capture."
+  },
+  {
+    "sample": "sample.json",
+    "vscode": "#f78c6c",
+    "nvim": "#c792ea",
+    "text": "^(level|deepest)$",
+    "reason": "JSON Key Level 2 color. Same depth limitation."
+  },
+  {
+    "sample": "sample.json",
+    "vscode": "#ff5370",
+    "nvim": "#c792ea",
+    "text": "^(level|escape)$",
+    "reason": "JSON Key Level 3 color. Same depth limitation."
+  },
+  {
+    "sample": "sample.json",
+    "vscode": "#89ddff",
+    "nvim": "#afafaf",
+    "text": "^\\\\\"$",
+    "reason": "The json query conceals an escaped quote with the same @conceal capture as string quotes, so it takes the punctuation grey instead of the escape color."
+  },
+  {
+    "sample": "sample.json",
+    "vscode": "#89ddff",
+    "nvim": "#fca03f",
+    "text": "^00e9$",
+    "reason": "tree-sitter-json's escape_sequence node covers only the backslash and u, while TextMate scopes the whole \\u00e9."
+  },
+  {
+    "sample": "sample.lua",
+    "vscode": "#a361ff",
+    "nvim": "#90f078",
+    "text": "^(name|weight|haunted|spook)$",
+    "reason": "The Lua TextMate grammar scopes some identifiers as variable.other and leaves others unscoped depending on position. Treesitter captures them all as @variable."
+  },
+  {
+    "sample": "sample.lua",
+    "vscode": "#ffcb6b",
+    "nvim": "#90f078",
+    "text": "^(M|target)$",
+    "reason": "The Lua grammar scopes the object of a method definition or call as entity.name.class. Treesitter sees an ordinary variable."
+  },
+  {
+    "sample": "sample.lua",
+    "vscode": "#b184dd",
+    "nvim": "#90f078",
+    "text": "^M$",
+    "reason": "The Lua grammar scopes the table in `function M.new` as part of the function name."
+  },
+  {
+    "sample": "sample.lua",
+    "vscode": "#b184dd",
+    "nvim": "#a361ff",
+    "text": "^\\.$",
+    "reason": "The Lua grammar includes the dot of `string.format` in the support.function scope."
+  },
+  {
+    "sample": "sample.lua",
+    "vscode": "#afafaf",
+    "nvim": "#894fe0",
+    "text": "^(in|goto)$",
+    "reason": "The lua query captures in and goto with the generic @keyword that also covers local, which the theme paints purple. keyword.control.lua is grey."
+  },
+  {
+    "sample": "sample.lua",
+    "vscode": "#894fe0 italic",
+    "nvim": "#679e63 italic",
+    "text": "^@param$",
+    "reason": "LuaDoc tags inside comments. The luadoc parser is not installed, so the whole comment is @comment."
+  },
+  {
+    "sample": "sample.lua",
+    "vscode": "#ffcb6b italic",
+    "nvim": "#679e63 italic",
+    "text": "^name$",
+    "reason": "LuaDoc parameter name inside a comment. See the @param entry."
+  },
+  {
+    "sample": "sample.lua",
+    "vscode": "#f17008 italic",
+    "nvim": "#679e63 italic",
+    "text": "^string$",
+    "reason": "LuaDoc type inside a comment. See the @param entry."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#afafaf bold",
+    "nvim": "#afafaf bold italic",
+    "text": "^\\*\\*$",
+    "reason": "Bold delimiters inside bold-italic text. Treesitter combines the italic flag from the enclosing emphasis; the theme's bold-italic rule is bold only."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#fab56b bold",
+    "nvim": "#fab56b bold italic",
+    "text": "^(both|bold)$",
+    "reason": "Bold text nested in italic, or the reverse. Treesitter combines both flags; the theme's bold-italic rule is bold only."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#afafaf bold",
+    "nvim": "#afafaf italic",
+    "text": "^\\*$",
+    "reason": "Italic delimiters nested inside bold. Treesitter applies the inner italic flag."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#c3e88d",
+    "nvim": "#ffcb6b",
+    "text": "^#+$",
+    "reason": "The heading marker is punctuation.definition.heading in TextMate. The markdown query captures marker and text as one @markup.heading node."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#afafaf",
+    "nvim": "#82aaff",
+    "text": "^\"$",
+    "reason": "Link title quotes. The markdown_inline query captures the quoted title as one @markup.link.label node."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#c792ea",
+    "nvim": "#82aaff",
+    "text": "^Title$",
+    "reason": "Link titles are string.other.link.description.title in TextMate. The markdown_inline query uses the same @markup.link.label as link text."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#f07178",
+    "nvim": "#82aaff",
+    "text": "^(alt|text)$",
+    "reason": "Image descriptions are string.other.link.description in TextMate. The markdown_inline query uses the same @markup.link.label as link text."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#eeffff",
+    "nvim": "#afafaf",
+    "text": "^[\\[\\]]$",
+    "reason": "Image brackets carry no punctuation scope in TextMate, unlike link brackets."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#eeffff",
+    "nvim": "#a361ff",
+    "text": "^[()]$",
+    "reason": "Image destination parentheses. The markdown_inline query gives them no capture."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#afafaf",
+    "nvim": "#ffffff",
+    "text": "^[\\[\\]]$",
+    "reason": "Reference definition brackets are punctuation in TextMate. The markdown query captures the whole label including brackets."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#ffffff",
+    "nvim": "#afafaf",
+    "text": "^ref$",
+    "reason": "The shortcut reference label [ref] is constant.other.reference.link in TextMate. The markdown_inline query captures it as link punctuation."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#82aaff",
+    "nvim": "#afafaf",
+    "text": "^x$",
+    "reason": "The checked task marker. The markdown query captures [x] as one @markup.list.checked node."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#afafaf",
+    "nvim": "#c792ea",
+    "text": "^```$",
+    "reason": "Fence delimiters are punctuation in TextMate. The markdown query gives the whole fenced block @markup.raw.block."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#afafaf",
+    "nvim": "#f78c6c underline",
+    "text": "^[<>]$",
+    "reason": "Autolink angle brackets. The markdown_inline query includes them in the @markup.link.url capture."
+  },
+  {
+    "sample": "sample.md",
+    "vscode": "#65737e bold",
+    "nvim": "#afafaf",
+    "text": "^---$",
+    "reason": "Thematic breaks are meta.separator in TextMate. The markdown query captures them with the same @punctuation.special as table pipes and quote markers."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#894fe0",
+    "nvim": "#afafaf",
+    "text": "^[frb]$",
+    "reason": "String prefixes are storage.type.string in TextMate. tree-sitter-python puts the prefix inside the string_start node with the quote."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#afafaf",
+    "nvim": "#894fe0",
+    "text": "^(in|is|not)$",
+    "reason": "Inside a comprehension the Python grammar scopes in, is and not as control flow. The python query captures them as @keyword.operator like every other operator."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#fca03f",
+    "nvim": "#894fe0 italic",
+    "text": "^self$",
+    "reason": "self in a parameter list is variable.parameter in TextMate. The python query applies @variable.builtin everywhere."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#f17008",
+    "nvim": "#b184dd",
+    "text": "^(super|RuntimeError)$",
+    "reason": "super and exception classes are support.type in TextMate. The python query captures them as builtin function calls."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#afafaf",
+    "nvim": "#f17008",
+    "text": "^@$",
+    "reason": "The decorator marker. The python query captures @ and the decorator name as one @attribute node."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#fca03f",
+    "nvim": "#afafaf",
+    "text": "^\"$",
+    "reason": "f-string quotes carry no punctuation scope in the VS Code grammar, unlike every other string."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#89ddff",
+    "nvim": "#fca03f",
+    "text": "^raw\\\\s$",
+    "reason": "Raw strings are string.regexp in TextMate. Treesitter sees an ordinary string."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#894fe0",
+    "nvim": "#fca03f",
+    "text": "^\\+$",
+    "reason": "Regex quantifier inside a raw string. See the raw string entry."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#a361ff",
+    "nvim": "#fca03f",
+    "text": "^__name__$",
+    "reason": "__name__ is support.variable.magic in TextMate, which no rule colors. The python query captures uppercase-looking names as @constant."
+  },
+  {
+    "sample": "sample.ts",
+    "vscode": "#90f078",
+    "nvim": "#d8d8d8",
+    "text": "^(Symbol|iterator)$",
+    "reason": "A computed method name in a class body. The TextMate grammar scopes it outside meta.block; the treesitter rule sees the class body ancestor."
+  },
+  {
+    "sample": "sample.ts",
+    "vscode": "#f17008",
+    "nvim": "#a361ff",
+    "text": "^this$",
+    "reason": "The this return type is support.type.primitive in TextMate. The typescript query gives (this_type) no capture."
+  },
+  {
+    "sample": "sample.tsx",
+    "vscode": "#afafaf",
+    "nvim": "#a361ff",
+    "text": "^[()]$",
+    "reason": "Empty arrow function parameter parentheses in TSX parse without a formal_parameters node that the extension rule can match."
+  }
+]

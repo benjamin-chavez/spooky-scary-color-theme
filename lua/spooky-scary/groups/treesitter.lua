@@ -180,6 +180,7 @@ local groups = {
   ["@constant.python"] = { fg = p.editorForeground },
   ["@module.python"] = { fg = p.editorForeground },
   ["@type.python"] = { fg = p.editorForeground },
+  ["@type.definition.python"] = { link = "Type" },
   ["@keyword.python"] = { link = "Conditional" },
   ["@constructor.python"] = { link = "Function" },
   ["@attribute.python"] = { fg = p.entityType },
@@ -195,6 +196,7 @@ local groups = {
   ["@keyword.function.lua"] = { link = "Conditional" },
   ["@module.builtin.lua"] = { link = "Function" },
   ["@label.lua"] = { fg = p.number },
+  ["@punctuation.delimiter.label.lua"] = { link = "Delimiter" },
 
   -- Markdown: heading text is an entity name, paragraph text is near-white, and the
   -- emphasis, code span and link delimiters the query conceals are punctuation.

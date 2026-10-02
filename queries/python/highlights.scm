@@ -13,3 +13,6 @@
 
 ; Superclasses are entity.other.inherited-class, not call arguments.
 (class_definition superclasses: (argument_list (identifier) @type.inherited))
+
+; Class names are entity.name.type.class even though other type positions are unscoped.
+(class_definition name: (identifier) @type.definition)
