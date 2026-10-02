@@ -125,7 +125,7 @@ The translation table, scope to capture:
 | `constant.character.escape` | @string.escape (`#89DDFF`) |
 | `string` | String, @string |
 | `string.regexp` | @string.regexp (`#89DDFF`) |
-| `entity.name`, `support.type`, `support.class` | Type, @type, @type.builtin, @module, @constructor (`#FFCB6B`) |
+| `entity.name`, `support.class` | Type, @type, @module, @constructor (`#FFCB6B`) |
 | `support.type` | @type.builtin (`#F17008`). The later Entity Types rule overrides the Class, Support rule for this scope because equal-specificity rules resolve to the last one listed. `support.class` keeps `#FFCB6B`. |
 | `entity.other.attribute-name` | @tag.attribute (`#C792EA`) |
 | `text.html.basic entity.other.attribute-name` | @tag.attribute.html (italic `#fca03f`) |
