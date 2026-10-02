@@ -87,3 +87,28 @@ largest remaining issue, and brought its own port to 73 differing characters.
 
 The known-differences file now has five entries: three LuaDoc tokens and two
 raw-string regex tokens.
+
+## Round 2
+
+Codex's report is `docs/superpowers/specs/2026-10-02-nvim-port-codex-round2.md`
+in its worktree. It reproduced the 22-character result with the screen
+inspector, accepted the predicate registration and depth counting (verified on
+extra fixtures through depth ten, with arrays between objects and a root
+array), accepted `@none.python`, accepted all five known-differences entries,
+and measured zero changed cells under the default colorscheme with the port's
+queries on the runtimepath. It ended with DISAGREEMENT on one point.
+
+### Agreed change, applied
+
+- The Python builtin call rules used suffix patterns (`*Error`, `*Exception`,
+  `*Warning`) that missed bare `Exception` and `Warning`, misclassified custom
+  exception names, and included `memoryview`, which the grammar does not list.
+  The rules now carry the exact `builtin-types` and `builtin-exceptions` name
+  lists from VS Code's MagicPython grammar. A temporary probe sample with
+  `Exception()`, `Warning()`, `CustomError()`, `memoryview()`,
+  `BaseException()`, `UserWarning()`, `RuntimeError()`, `super()`, `list()`
+  and `len()` showed zero mismatches.
+
+### Result
+
+22 of 6985 characters differ, 0 unexplained runs, 5 known-difference runs.

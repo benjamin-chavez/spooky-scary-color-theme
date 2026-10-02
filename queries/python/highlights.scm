@@ -41,17 +41,26 @@
   (#has-ancestor? @spooky.punctuation generator_expression list_comprehension set_comprehension dictionary_comprehension)
   (#set! priority 110))
 
-; Builtin types and exceptions are support.type in TextMate even when called.
+; Builtin types and exceptions are support.type in TextMate even when called. The two
+; name lists are the builtin-types and builtin-exceptions rules of VS Code's MagicPython grammar.
 ((call function: (identifier) @spooky.type.builtin)
-  (#any-of? @spooky.type.builtin "bool" "bytearray" "bytes" "classmethod" "complex" "dict"
-    "float" "frozenset" "int" "list" "memoryview" "object" "property" "set" "slice"
-    "staticmethod" "str" "super" "tuple" "type"))
+  (#any-of? @spooky.type.builtin
+    "bool" "bytearray" "bytes" "classmethod" "complex" "dict" "float" "frozenset" "int"
+    "list" "object" "property" "set" "slice" "staticmethod" "str" "tuple" "type" "super"))
 ((call function: (identifier) @spooky.type.builtin)
-  (#lua-match? @spooky.type.builtin "^%u%w*Error$"))
-((call function: (identifier) @spooky.type.builtin)
-  (#lua-match? @spooky.type.builtin "^%u%w*Exception$"))
-((call function: (identifier) @spooky.type.builtin)
-  (#lua-match? @spooky.type.builtin "^%u%w*Warning$"))
-((call function: (identifier) @spooky.type.builtin)
-  (#any-of? @spooky.type.builtin "StopIteration" "StopAsyncIteration" "KeyboardInterrupt"
-    "SystemExit" "GeneratorExit"))
+  (#any-of? @spooky.type.builtin
+    "ArithmeticError" "AssertionError" "AttributeError" "BufferError" "BlockingIOError"
+    "BrokenPipeError" "ChildProcessError" "ConnectionError" "ConnectionAbortedError"
+    "ConnectionRefusedError" "ConnectionResetError" "EOFError" "EnvironmentError"
+    "FileExistsError" "FileNotFoundError" "FloatingPointError" "IOError" "ImportError"
+    "IndentationError" "IndexError" "InterruptedError" "IsADirectoryError"
+    "NotADirectoryError" "PermissionError" "ProcessLookupError" "TimeoutError" "KeyError"
+    "LookupError" "MemoryError" "NameError" "NotImplementedError" "OSError"
+    "OverflowError" "ReferenceError" "RuntimeError" "RecursionError" "SyntaxError"
+    "SystemError" "TabError" "TypeError" "UnboundLocalError" "UnicodeError"
+    "UnicodeEncodeError" "UnicodeDecodeError" "UnicodeTranslateError" "ValueError"
+    "WindowsError" "ZeroDivisionError" "ModuleNotFoundError" "Warning"
+    "DeprecationWarning" "PendingDeprecationWarning" "RuntimeWarning" "SyntaxWarning"
+    "UserWarning" "FutureWarning" "ImportWarning" "UnicodeWarning" "BytesWarning"
+    "ResourceWarning" "SystemExit" "StopIteration" "StopAsyncIteration"
+    "KeyboardInterrupt" "GeneratorExit" "Exception" "BaseException"))
