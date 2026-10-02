@@ -87,9 +87,10 @@ same name, and highlight groups are defined for bufferline, nvim-tree, telescope
 nvim-cmp, indent-blankline, which-key, render-markdown and todo-comments.
 
 The repo also ships small `queries/*/highlights.scm` extensions so Neovim can color string
-quotes, brackets, block-scoped variables and Markdown prose the way VS Code's TextMate
-grammars do. Their capture names fall back to the standard captures, so other colorschemes
-are unaffected.
+quotes, brackets, block-scoped variables, JSON key depth and Markdown prose the way VS Code's
+TextMate grammars do. They only add private `@spooky.*` captures, which no other colorscheme
+defines, so switching themes renders exactly as before. `plugin/spooky-scary.lua` registers
+the one query predicate they use.
 
 The colors are verified against VS Code's own tokenizer by `tools/compare/run.sh`. Differences
 treesitter cannot express are listed with reasons in `tools/compare/known-differences.json`.
