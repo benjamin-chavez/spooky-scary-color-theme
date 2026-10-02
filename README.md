@@ -92,5 +92,7 @@ TextMate grammars do. They only add private `@spooky.*` captures, which no other
 defines, so switching themes renders exactly as before. `plugin/spooky-scary.lua` registers
 the one query predicate they use.
 
-The colors are verified against VS Code's own tokenizer by `tools/compare/run.sh`. Differences
-treesitter cannot express are listed with reasons in `tools/compare/known-differences.json`.
+The colors are verified against VS Code's own tokenizer by `tools/compare/run.sh`, which needs
+Node, tmux and a local VS Code install for its grammars. It paints each sample in a real Neovim
+and diffs every character. The few remaining differences are listed with reasons in
+`tools/compare/known-differences.json`.
