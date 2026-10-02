@@ -115,7 +115,8 @@ The translation table, scope to capture:
 | `variable.language` | @variable.builtin (italic purple) |
 | `keyword`, `storage.type`, `storage.modifier` | Keyword, Statement, Type for storage, @keyword, @keyword.function, @type.qualifier |
 | `keyword.control` | Conditional, Repeat, @keyword.conditional, @keyword.repeat, @keyword.return (grey `#afafaf`) |
-| `keyword.other`, `keyword.other.unit` | @keyword.operator excluded, @number.unit if present |
+| `keyword.other` | @keyword.directive, @keyword.import where the TextMate scope is not `keyword.control.import` (`#fca03f`) |
+| `keyword.other.unit` | the capture nvim-treesitter's css highlights query assigns to `(unit)` nodes, read from the installed query during implementation (`#fca03f`) |
 | `punctuation` | Delimiter, @punctuation.bracket, @punctuation.delimiter, @punctuation.special |
 | `meta.tag`, `punctuation.definition.tag` | @tag.delimiter |
 | `entity.name.tag` | Tag, @tag |
@@ -125,7 +126,7 @@ The translation table, scope to capture:
 | `string` | String, @string |
 | `string.regexp` | @string.regexp (`#89DDFF`) |
 | `entity.name`, `support.type`, `support.class` | Type, @type, @type.builtin, @module, @constructor (`#FFCB6B`) |
-| `support.type` alone | @type.builtin? Note: the later rule `#F17008` overrides `support.type` for exact matches. Resolve by harness. |
+| `support.type` | @type.builtin (`#F17008`). The later Entity Types rule overrides the Class, Support rule for this scope because equal-specificity rules resolve to the last one listed. `support.class` keeps `#FFCB6B`. |
 | `entity.other.attribute-name` | @tag.attribute (`#C792EA`) |
 | `text.html.basic entity.other.attribute-name` | @tag.attribute.html (italic `#fca03f`) |
 | `entity.other.attribute-name.class` | @type.css for class selectors (`#c8a9f7`) |
