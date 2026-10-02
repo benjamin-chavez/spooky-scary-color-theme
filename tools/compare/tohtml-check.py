@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Cross-checks the harness resolver against Neovim's own :TOhtml rendering of a sample.
-Usage: python3 tohtml-check.py sample.js [nvimOutDir]   (expects out/tohtml-<sample>.html)"""
+Usage: python3 tohtml-check.py sample.js [nvimOutDir]   (expects out/tohtml-<sample>.html)
+Caveat: tohtml.lua ignores capture priority metadata while the real highlighter honors it
+(runtime/lua/vim/treesitter/highlighter.lua), so the markdown sample reports differences on
+text covered by the priority-99 @markup.plain capture. Every other sample should report zero."""
 import re, json, html, sys, os
 here = os.path.dirname(os.path.abspath(__file__))
 sample = sys.argv[1]
