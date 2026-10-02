@@ -10,7 +10,7 @@ local sample = arg[1]
 vim.cmd("edit " .. root .. "/tools/compare/samples/" .. sample)
 local lang = ({js="javascript",ts="typescript",tsx="tsx",html="html",css="css",json="json",md="markdown",py="python",lua="lua"})[sample:match("%.(%w+)$")]
 vim.treesitter.start(0, lang)
-vim.treesitter.get_parser(0):parse(true)
+vim.treesitter.get_parser(0, lang):parse(true)
 local html = require("tohtml").tohtml(0, { number_lines = false })
 vim.fn.writefile(html, root .. "/tools/compare/out/tohtml-" .. sample .. ".html")
 print("wrote tohtml for " .. sample .. " (" .. #html .. " lines)")

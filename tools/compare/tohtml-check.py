@@ -13,8 +13,10 @@ for m in re.finditer(r'\.([\w-]+)\s*\{([^}]*)\}', src):
 body_fg = re.search(r'body\s*\{[^}]*color:\s*(#[0-9a-fA-F]{6})', src).group(1).lower()
 pre = re.search(r'<pre>\n?(.*?)</pre>', src, re.S).group(1)
 
+stack = []  # spans can cross lines, so the open-span stack persists between lines
+
 def expand(line):
-    cells, stack = [], []
+    cells = []
     for tok in re.finditer(r'<span class="([^"]+)">|</span>|([^<]+)', line):
         if tok.group(1) is not None:
             stack.append(tok.group(1))
