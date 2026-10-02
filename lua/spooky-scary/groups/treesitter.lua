@@ -103,32 +103,92 @@ local groups = {
   ["@tag.attribute"] = { fg = p.attribute },
   ["@tag.delimiter"] = { fg = p.operatorMisc },
 
-  -- HTML: attributes are italic orange only inside text.html.basic.
-  ["@tag.attribute.html"] = { fg = p.htmlAttribute, italic = true },
+  -- JavaScript family. The grammar has no screaming-case rule, object keys and
+  -- support properties match no rule, and `constructor` is a storage keyword.
+  ["@constant.javascript"] = { link = "Identifier" },
+  ["@constant.typescript"] = { link = "Identifier" },
+  ["@constant.tsx"] = { link = "Identifier" },
+  ["@property.javascript"] = { fg = p.editorForeground },
+  ["@property.typescript"] = { fg = p.editorForeground },
+  ["@property.tsx"] = { fg = p.editorForeground },
 
-  -- CSS: property names, class selectors, units.
+  -- HTML: attributes are italic orange only inside text.html.basic, and text inside
+  -- elements has no rule, so headings, links and emphasis stay plain.
+  ["@tag.attribute.html"] = { fg = p.htmlAttribute, italic = true },
+  ["@operator.html"] = { fg = p.operatorMisc },
+  ["@string.special.url.html"] = { fg = p.string },
+  ["@character.special.html"] = { fg = p.number },
+  ["@constant.html"] = { fg = p.tag },
+  ["@markup.heading.html"] = { fg = p.editorForeground },
+  ["@markup.strong.html"] = { fg = p.editorForeground },
+  ["@markup.italic.html"] = { fg = p.editorForeground },
+  ["@markup.underline.html"] = { fg = p.editorForeground },
+  ["@markup.strikethrough.html"] = { fg = p.editorForeground },
+  ["@markup.raw.html"] = { fg = p.editorForeground },
+  ["@markup.link.html"] = { fg = p.editorForeground },
+  ["@markup.link.label.html"] = { fg = p.editorForeground },
+  ["@markup.link.url.html"] = { fg = p.editorForeground },
+
+  -- CSS: property names, class selectors, ids and !important.
   ["@property.css"] = { fg = p.cssProperty },
   ["@type.css"] = { fg = p.cssClass },
-  ["@constant.css"] = { fg = p.cssId },
+  ["@constant.css"] = { fg = p.attribute },
+  ["@keyword.modifier.css"] = { fg = p.number },
   ["@string.css"] = { fg = p.string },
   ["@tag.css"] = { fg = p.tag },
   ["@attribute.css"] = { fg = p.attribute },
 
-  -- JSON: level 0 keys. Deeper levels are a known difference.
+  -- JSON: level 0 keys, and the quote marks the query marks for concealing are punctuation.
   ["@property.json"] = { fg = p.jsonKey0 },
+  ["@conceal.json"] = { fg = p.operatorMisc },
 
-  -- Markdown: plain text is the Material near-white, not the editor purple.
-  ["@markup.heading.markdown"] = { fg = p.markdownHeading },
-  ["@punctuation.special.markdown"] = { fg = p.markdownHeading },
-  ["@punctuation.delimiter.markdown"] = { fg = p.markdownMuted },
-  ["@markup.raw.block.markdown"] = { fg = p.markdownPlain },
-  ["@label.markdown"] = { fg = p.markdownMuted },
+  -- Python: the grammar leaves plain identifiers, imports and most types unscoped,
+  -- and colors most non-flow keywords as control keywords.
+  ["@variable.python"] = { fg = p.editorForeground },
+  ["@variable.member.python"] = { fg = p.editorForeground },
+  ["@constant.python"] = { fg = p.editorForeground },
+  ["@module.python"] = { fg = p.editorForeground },
+  ["@type.python"] = { fg = p.editorForeground },
+  ["@keyword.python"] = { link = "Conditional" },
+  ["@constructor.python"] = { link = "Function" },
+  ["@attribute.python"] = { fg = p.entityType },
+  ["@attribute.builtin.python"] = { fg = p.entityType },
+  ["@punctuation.special.python"] = { fg = p.string },
+
+  -- Lua: the grammar scopes no punctuation, so brackets and separators stay plain.
+  ["@punctuation.delimiter.lua"] = { fg = p.editorForeground },
+  ["@punctuation.bracket.lua"] = { fg = p.editorForeground },
+  ["@constructor.lua"] = { fg = p.editorForeground },
+  ["@constant.lua"] = { link = "Identifier" },
+  ["@keyword.function.lua"] = { link = "Conditional" },
+  ["@module.builtin.lua"] = { link = "Function" },
+  ["@label.lua"] = { fg = p.number },
+
+  -- Markdown: heading text is an entity name, paragraph text is near-white, and the
+  -- emphasis, code span and link delimiters the query conceals are punctuation.
+  ["@markup.heading.markdown"] = { fg = p.markdownPlain },
+  ["@markup.heading.1.markdown"] = { fg = p.classSupport },
+  ["@markup.heading.2.markdown"] = { fg = p.classSupport },
+  ["@markup.heading.3.markdown"] = { fg = p.classSupport },
+  ["@markup.heading.4.markdown"] = { fg = p.classSupport },
+  ["@markup.heading.5.markdown"] = { fg = p.classSupport },
+  ["@markup.heading.6.markdown"] = { fg = p.classSupport },
+  ["@punctuation.special.markdown"] = { fg = p.operatorMisc },
+  ["@punctuation.delimiter.markdown"] = { fg = p.operatorMisc },
+  ["@markup.list.markdown"] = { fg = p.operatorMisc },
+  ["@markup.list.checked.markdown"] = { fg = p.operatorMisc },
+  ["@markup.list.unchecked.markdown"] = { fg = p.operatorMisc },
+  ["@markup.raw.block.markdown"] = { fg = p.markdownRawInline },
+  ["@label.markdown"] = { fg = p.markdownPlain },
   ["@markup.quote.markdown"] = { fg = p.markdownPlain, italic = true },
-  ["@markup.list.markdown"] = { fg = p.markdownPlain },
+  ["@markup.link.label.markdown"] = { fg = p.markdownLinkAnchor },
+  ["@markup.link.url.markdown"] = { fg = p.markupUnderline, underline = true },
+  ["@conceal.markdown_inline"] = { fg = p.operatorMisc },
+  ["@markup.link.markdown_inline"] = { fg = p.operatorMisc },
   ["@markup.link.label.markdown_inline"] = { fg = p.markdownLink },
-  ["@markup.link.markdown_inline"] = { fg = p.markdownLinkAnchor },
-  ["@markup.link.url.markdown_inline"] = { fg = p.markdownPlain, underline = true },
-  ["@markup.raw.markdown_inline"] = { fg = p.markdownRawInline },
+  ["@markup.link.url.markdown_inline"] = { fg = p.markupUnderline, underline = true },
+  ["@markup.raw.markdown_inline"] = { fg = p.markdownPlain },
+  ["@markup.strikethrough.markdown_inline"] = { fg = p.markdownPlain, strikethrough = true },
   ["@string.escape.markdown_inline"] = { fg = p.escape },
 }
 
