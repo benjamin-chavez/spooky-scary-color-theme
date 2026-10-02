@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- A comment in the head -->
+  <meta charset="utf-8">
+  <title>Spooky Page</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { color: #90f078; margin: 0; }
+  </style>
+</head>
+<body class="dark theme">
+  <header id="top">
+    <h1>Welcome &amp; beware</h1>
+    <nav><a href="#about">About</a> | <a href="https://example.com">Site</a></nav>
+  </header>
+  <main>
+    <p data-count="13">Thirteen <strong>ghosts</strong> live here.</p>
+    <input type="checkbox" checked disabled>
+    <img src="pumpkin.png" alt="A pumpkin">
+  </main>
+  <script>
+    const boo = document.querySelector("#top");
+    boo.addEventListener("click", () => alert("Boo!"));
+  </script>
+</body>
+</html>

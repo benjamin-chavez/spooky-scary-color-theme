@@ -1,0 +1,19 @@
+{
+  "name": "spooky-scary-color-theme",
+  "version": "0.0.12",
+  "haunted": true,
+  "ghosts": null,
+  "count": 13,
+  "ratio": 0.75,
+  "tags": ["halloween", "dark", "purple"],
+  "nested": {
+    "level": 1,
+    "deeper": {
+      "level": 2,
+      "deepest": {
+        "level": 3,
+        "escape": "tab\there \"quoted\" \u00e9"
+      }
+    }
+  }
+}
