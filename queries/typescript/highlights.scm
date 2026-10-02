@@ -1,44 +1,42 @@
 ;; extends
 
-; Type annotation punctuation is keyword.operator.type in TextMate, so it takes the keyword color.
-(type_annotation ":" @punctuation.delimiter.type)
-(union_type "|" @punctuation.delimiter.type)
-(intersection_type "&" @punctuation.delimiter.type)
-(optional_parameter "?" @punctuation.delimiter.type)
-(property_signature "?" @punctuation.delimiter.type)
+(type_annotation ":" @spooky.keyword)
+(union_type "|" @spooky.keyword)
+(intersection_type "&" @spooky.keyword)
+(optional_parameter "?" @spooky.keyword)
+(property_signature "?" @spooky.keyword)
+[(type_arguments ["<" ">"] @spooky.punctuation)
+ (type_parameters ["<" ">"] @spooky.punctuation)]
 
-; `import type` is keyword.control.type; implemented and extended types are inherited classes.
-(import_statement "type" @keyword.import.type)
-(implements_clause (type_identifier) @type.inherited)
-(implements_clause (generic_type (type_identifier) @type.inherited))
-(extends_clause value: (identifier) @type.inherited)
+(import_statement "type" @spooky.punctuation)
+(implements_clause (type_identifier) @spooky.string)
+(implements_clause (generic_type (type_identifier) @spooky.string))
+(extends_clause value: (identifier) @spooky.string)
+(this_type) @spooky.type.builtin
+(formal_parameters ["(" ")"] @spooky.punctuation)
 
-(formal_parameters ["(" ")"] @punctuation.bracket.parameters)
+; TypeScript's base query follows ecma and repeats its identifier heuristics.
+((identifier) @spooky.variable
+  (#lua-match? @spooky.variable "^[A-Z]")
+  (#not-has-parent? @spooky.variable class_declaration class_heritage extends_clause new_expression call_expression enum_declaration function_declaration generator_function_declaration function_expression))
 
-; The typescript base query loads after the ecma extension and re-captures capitalized
-; identifiers as types, so the identifier rules from queries/ecma are repeated here.
-; Capitalized identifiers in value positions are plain variables in TextMate; the
-; nvim-treesitter query guesses they are types.
-((identifier) @variable.capitalized
-  (#lua-match? @variable.capitalized "^[A-Z]")
-  (#not-has-parent? @variable.capitalized class_declaration class_heritage extends_clause new_expression call_expression enum_declaration function_declaration generator_function_declaration function_expression))
+(method_definition name: (property_identifier) @spooky.keyword
+  (#eq? @spooky.keyword "constructor"))
 
-; Inherited classes are entity.other.inherited-class, the constructor method is
-; storage.type, and `in`/`of` in loops are keyword.operator.expression.
-(method_definition name: (property_identifier) @constructor.keyword
-  (#eq? @constructor.keyword "constructor"))
-(for_in_statement ["in" "of"] @keyword.operator)
-(await_expression "await" @keyword.coroutine.await)
-(export_statement "default" @keyword.default)
+((identifier) @spooky.variable.block
+  (#has-ancestor? @spooky.variable.block statement_block named_imports export_clause)
+  (#not-has-parent? @spooky.variable.block call_expression new_expression function_declaration generator_function_declaration method_definition class_declaration formal_parameters assignment_pattern arrow_function required_parameter optional_parameter))
 
-; The theme's `meta.block variable.other` rule: variables inside statement blocks,
-; class bodies and import lists. Function names, constructors and parameters keep
-; their own scopes in TextMate, so they are excluded.
-((identifier) @variable.block
-  (#has-ancestor? @variable.block statement_block class_body named_imports export_clause)
-  (#not-has-parent? @variable.block call_expression new_expression function_declaration generator_function_declaration method_definition class_declaration formal_parameters assignment_pattern arrow_function required_parameter optional_parameter))
+((member_expression property: (property_identifier) @spooky.variable.block)
+  (#has-ancestor? @spooky.variable.block statement_block))
 
-((member_expression property: (property_identifier) @variable.block)
-  (#has-ancestor? @variable.block statement_block class_body))
+(call_expression function: (member_expression property: (property_identifier) @spooky.function))
+(variable_declarator name: (identifier) @spooky.function value: [(arrow_function) (function_expression)])
+(assignment_expression left: (identifier) @spooky.function right: [(arrow_function) (function_expression)])
 
-(call_expression function: (member_expression property: (property_identifier) @function.method.call))
+((identifier) @spooky.variable.language
+  (#eq? @spooky.variable.language "arguments")
+  (#not-has-parent? @spooky.variable.language formal_parameters required_parameter optional_parameter))
+
+((member_expression property: (property_identifier) @spooky.plain)
+  (#eq? @spooky.plain "length"))

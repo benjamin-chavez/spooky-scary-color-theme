@@ -49,7 +49,12 @@ for (const file of fs.readdirSync(vscodeDir).sort()) {
     let open = null;
     for (let col = 0; col <= line.text.length; col++) {
       totalCells += col < line.text.length ? 1 : 0;
-      const differs = col < line.text.length && expected[col] !== (actual[col] ?? "(none)");
+      // Whitespace has no visible foreground, so it only counts when an underline differs.
+      const invisible =
+        col < line.text.length && /\s/.test(line.text[col]) &&
+        expected[col]?.includes("underline") === (actual[col] ?? "").includes("underline");
+      const differs =
+        col < line.text.length && !invisible && expected[col] !== (actual[col] ?? "(none)");
       if (differs) mismatchedCells++;
       const key = differs ? `${expected[col]}|${actual[col]}` : null;
       if (open && (!differs || open.key !== key)) {

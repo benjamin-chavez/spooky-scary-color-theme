@@ -116,6 +116,34 @@ function tokenizeSample(grammar, colorMap, editorBackground, editorForeground, t
   });
 }
 
+// Debug mode: node vscode-tokens.mjs --scopes sample.js 12 prints each token's scope stack
+// and resolved color on that line, which is how a disputed row gets settled.
+async function printScopes(registry, colorMap, editorBackground, editorForeground, sample, lineNumber) {
+  const scopeName = scopeByExtension[path.extname(sample)];
+  const grammar = await registry.loadGrammar(scopeName);
+  const lines = fs.readFileSync(path.join(samplesDir, sample), "utf8").split("\n");
+  let ruleStack = vsctm.INITIAL;
+  let ruleStack2 = vsctm.INITIAL;
+  for (let index = 0; index < lines.length; index++) {
+    const line = lines[index];
+    const scoped = grammar.tokenizeLine(line, ruleStack);
+    const binary = grammar.tokenizeLine2(line, ruleStack2);
+    ruleStack = scoped.ruleStack;
+    ruleStack2 = binary.ruleStack;
+    if (index + 1 !== lineNumber) continue;
+    for (const token of scoped.tokens) {
+      let metadata = 0;
+      for (let b = 0; b < binary.tokens.length; b += 2) {
+        if (binary.tokens[b] <= token.startIndex) metadata = binary.tokens[b + 1];
+      }
+      const foregroundIndex = (metadata & FOREGROUND_MASK) >>> FOREGROUND_OFFSET;
+      const color = blendOverBackground(colorMap[foregroundIndex] ?? editorForeground, editorBackground);
+      const text = JSON.stringify(line.slice(token.startIndex, token.endIndex));
+      console.log(`${color}  ${text.padEnd(24)} ${token.scopes.slice(1).join(" ")}`);
+    }
+  }
+}
+
 async function main() {
   const themeJson = parseJsonc(fs.readFileSync(themePath, "utf8"));
   const editorBackground = themeJson.colors["editor.background"].toLowerCase();
@@ -129,6 +157,10 @@ async function main() {
   };
   const registry = await createRegistry(theme, loadGrammarIndex());
   const colorMap = registry.getColorMap();
+  if (process.argv[2] === "--scopes") {
+    await printScopes(registry, colorMap, editorBackground, editorForeground, process.argv[3], Number(process.argv[4]));
+    return;
+  }
   fs.mkdirSync(outDir, { recursive: true });
 
   for (const sample of fs.readdirSync(samplesDir).sort()) {

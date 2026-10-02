@@ -4,6 +4,8 @@ local root = "/Users/benjaminchavez/Code/spooky-scary-color-theme"
 vim.opt.rtp:prepend(vim.fn.expand("~/.local/share/nvim/lazy/nvim-treesitter"))
 vim.opt.rtp:prepend(root)
 require("nvim-treesitter.query_predicates")
+-- plugin/ files are only sourced at startup, so load the port's predicate explicitly.
+vim.cmd("runtime! plugin/spooky-scary.lua")
 vim.o.termguicolors = true
 vim.cmd("colorscheme spooky-scary")
 local sample = arg[1]

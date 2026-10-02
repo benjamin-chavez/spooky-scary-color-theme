@@ -14,6 +14,8 @@ vim.opt.runtimepath:prepend(treesitter_dir)
 vim.opt.runtimepath:prepend(port_dir)
 -- Markdown injections use directives that nvim-treesitter registers in this module.
 require("nvim-treesitter.query_predicates")
+-- plugin/ files are only sourced at startup, so load the port's predicate explicitly.
+vim.cmd("runtime! plugin/spooky-scary.lua")
 vim.o.termguicolors = true
 vim.cmd("colorscheme spooky-scary")
 

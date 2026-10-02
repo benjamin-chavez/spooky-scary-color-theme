@@ -23,16 +23,18 @@ return {
   FoldColumn = { fg = p.statusBarForeground, bg = p.editorBackground },
   Folded = { fg = p.textLinkForeground, bg = p.activityBarBadgeBackground },
 
-  Cursor = { fg = p.editorBackground, bg = p.cursor },
+  -- The theme sets both cursor colors to green, so a block cursor hides its character in VS Code too.
+  Cursor = { fg = p.cursor, bg = p.cursor },
   lCursor = { link = "Cursor" },
   CursorIM = { link = "Cursor" },
   TermCursor = { link = "Cursor" },
   TermCursorNC = { fg = p.editorBackground, bg = p.statusBarForeground },
 
-  Visual = { bg = p.selectionBackground },
+  Visual = { fg = p.selectionForeground, bg = p.selectionBackground },
   VisualNOS = { link = "Visual" },
-  Search = { fg = p.editorBackground, bg = p.findMatchBackground },
-  CurSearch = { fg = p.editorBackground, bg = p.foreground },
+  -- findMatchBackground is the current match; other matches keep VS Code's default dark highlight.
+  Search = { bg = p.blend("#ea5c0055", p.editorBackground) },
+  CurSearch = { fg = p.editorBackground, bg = p.findMatchBackground },
   IncSearch = { link = "CurSearch" },
   Substitute = { link = "CurSearch" },
   MatchParen = { fg = p.foreground, bold = true, underline = true },

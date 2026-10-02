@@ -30,7 +30,7 @@ local groups = {
   ["@string.special.url"] = { fg = p.textLinkForeground, underline = true },
   ["@string.special.path"] = { link = "String" },
   ["@character"] = { link = "Character" },
-  ["@character.special"] = { link = "SpecialChar" },
+  ["@character.special"] = { link = "Constant" },
   ["@boolean"] = { link = "Boolean" },
   ["@number"] = { link = "Number" },
   ["@number.float"] = { link = "Float" },
@@ -72,24 +72,45 @@ local groups = {
   ["@punctuation.bracket"] = { link = "Delimiter" },
   ["@punctuation.special"] = { link = "Delimiter" },
 
-  -- Captures added by this repo's queries/ extensions, named so other colorschemes
-  -- fall back to the standard capture.
-  ["@punctuation.bracket.round"] = { fg = p.editorForeground },
-  ["@punctuation.bracket.square"] = { fg = p.editorForeground },
-  ["@punctuation.delimiter.string"] = { link = "Delimiter" },
-  ["@punctuation.delimiter.type"] = { link = "Keyword" },
-  ["@punctuation.bracket.pattern"] = { link = "Delimiter" },
-  ["@punctuation.delimiter.annotation"] = { link = "Delimiter" },
-  ["@punctuation.bracket.parameters"] = { link = "Delimiter" },
-  ["@punctuation.delimiter.parameters"] = { link = "Delimiter" },
-  ["@variable.block"] = { fg = p.blockVariable },
-  ["@variable.capitalized"] = { link = "Identifier" },
-  ["@type.inherited"] = { fg = p.string },
-  ["@constructor.keyword"] = { link = "Keyword" },
-  ["@keyword.coroutine.await"] = { link = "Conditional" },
-  ["@keyword.default"] = { link = "Conditional" },
-  ["@keyword.import.type"] = { link = "Include" },
-  ["@markup.plain"] = { fg = p.markdownPlain },
+  -- Private captures from this repo's queries/ extensions. Nothing else defines
+  -- @spooky.*, so other colorschemes keep their base captures untouched.
+  ["@spooky.plain"] = { fg = p.editorForeground },
+  ["@spooky.punctuation"] = { link = "Delimiter" },
+  ["@spooky.variable"] = { link = "Identifier" },
+  ["@spooky.variable.block"] = { fg = p.blockVariable },
+  ["@spooky.variable.language"] = { fg = p.languageVariable, italic = true },
+  ["@spooky.parameter"] = { fg = p.number, nocombine = true },
+  ["@spooky.function"] = { link = "Function" },
+  ["@spooky.type"] = { link = "Type" },
+  ["@spooky.type.builtin"] = { fg = p.entityType },
+  ["@spooky.keyword"] = { link = "Keyword" },
+  ["@spooky.keyword.other"] = { link = "Constant" },
+  ["@spooky.comment"] = { link = "Comment" },
+  ["@spooky.string"] = { link = "String" },
+  ["@spooky.string.prefix"] = { link = "Keyword" },
+  ["@spooky.string.escape"] = { fg = p.escape },
+  ["@spooky.tag"] = { link = "Tag" },
+  ["@spooky.attribute.html"] = { fg = p.htmlAttribute, italic = true },
+  ["@spooky.json.key1"] = { fg = p.jsonKey1 },
+  ["@spooky.json.key2"] = { fg = p.jsonKey2 },
+  ["@spooky.json.key3"] = { fg = p.jsonKey3 },
+  ["@spooky.json.key4"] = { fg = p.jsonKey4 },
+  ["@spooky.json.key5"] = { fg = p.jsonKey5 },
+  ["@spooky.json.key6"] = { fg = p.jsonKey6 },
+  ["@spooky.json.key7"] = { fg = p.jsonKey7 },
+  ["@spooky.json.key8"] = { fg = p.jsonKey8 },
+  ["@spooky.markup.plain"] = { fg = p.markdownPlain },
+  ["@spooky.markup.heading.marker"] = { fg = p.markdownHeading },
+  ["@spooky.markup.raw.block"] = { fg = p.markdownRawInline },
+  ["@spooky.markup.separator"] = { fg = p.markdownMuted, bold = true },
+  ["@spooky.markup.link.label"] = { fg = p.markdownLink },
+  ["@spooky.markup.link.title"] = { fg = p.markdownLinkDescription },
+  ["@spooky.markup.link.description"] = { fg = p.otherVariable },
+  ["@spooky.markup.link.reference"] = { fg = p.markdownLinkAnchor },
+  ["@spooky.markup.link.delimiter"] = { fg = p.operatorMisc, nocombine = true },
+  ["@spooky.markup.link.url"] = { fg = p.markupUnderline, underline = true },
+  ["@spooky.markup.strong"] = { fg = p.markupBold, bold = true, nocombine = true },
+  ["@spooky.markup.delimiter.strong"] = { fg = p.operatorMisc, bold = true, nocombine = true },
 
   ["@markup.strong"] = { fg = p.markupBold, bold = true },
   ["@markup.italic"] = { fg = p.markupItalic, italic = true },
@@ -122,26 +143,34 @@ local groups = {
   ["@tag.attribute"] = { fg = p.attribute },
   ["@tag.delimiter"] = { fg = p.operatorMisc },
 
-  -- JavaScript family. The grammar has no screaming-case rule, object keys and
-  -- support properties match no rule, and `constructor` is a storage keyword.
+  -- JavaScript family. Screaming-case names, console and document are plain variables
+  -- in TextMate; brackets other than braces have no rule; JSX text and template
+  -- substitutions sit inside grey meta.tag or embedded scopes.
   ["@constant.javascript"] = { link = "Identifier" },
   ["@constant.typescript"] = { link = "Identifier" },
   ["@constant.tsx"] = { link = "Identifier" },
-  ["@property.javascript"] = { fg = p.editorForeground },
-  ["@property.typescript"] = { fg = p.editorForeground },
-  ["@property.tsx"] = { fg = p.editorForeground },
-  ["@variable.member.key"] = { fg = p.editorForeground },
-  -- @none marks JSX text and template substitutions, both meta.tag or embedded punctuation.
-  ["@none.javascript"] = { fg = p.operatorMisc },
-  ["@none.typescript"] = { fg = p.operatorMisc },
-  ["@none.tsx"] = { fg = p.operatorMisc },
+  ["@variable.builtin.javascript"] = { link = "Identifier" },
+  ["@variable.builtin.typescript"] = { link = "Identifier" },
+  ["@variable.builtin.tsx"] = { link = "Identifier" },
+  ["@keyword.coroutine.javascript"] = { link = "Keyword" },
+  ["@keyword.coroutine.typescript"] = { link = "Keyword" },
+  ["@keyword.coroutine.tsx"] = { link = "Keyword" },
+  ["@punctuation.bracket.javascript"] = {},
+  ["@punctuation.bracket.typescript"] = {},
+  ["@punctuation.bracket.tsx"] = {},
+  ["@none.javascript"] = { link = "Delimiter" },
+  ["@none.typescript"] = { link = "Delimiter" },
+  ["@none.tsx"] = { link = "Delimiter" },
+  ["@attribute.javascript"] = { link = "Identifier" },
+  ["@attribute.typescript"] = { link = "Identifier" },
+  ["@attribute.tsx"] = { link = "Identifier" },
+  ["@keyword.directive.javascript"] = { link = "String" },
 
   -- HTML: attributes are italic orange only inside text.html.basic, and text inside
   -- elements has no rule, so headings, links and emphasis stay plain.
   ["@tag.attribute.html"] = { fg = p.htmlAttribute, italic = true },
   ["@operator.html"] = { fg = p.operatorMisc },
   ["@string.special.url.html"] = { fg = p.string },
-  ["@character.special.html"] = { fg = p.number },
   ["@constant.html"] = { fg = p.tag },
   ["@markup.heading.html"] = { fg = p.editorForeground },
   ["@markup.heading.1.html"] = { fg = p.editorForeground },
@@ -165,38 +194,40 @@ local groups = {
   ["@constant.css"] = { fg = p.attribute },
   ["@keyword.modifier.css"] = { fg = p.number },
   ["@string.css"] = { fg = p.string },
-  ["@string.color.css"] = { fg = p.operatorMisc },
   ["@tag.css"] = { fg = p.tag },
   ["@attribute.css"] = { fg = p.attribute },
 
-  -- JSON: level 0 keys, and the quote marks the query marks for concealing are punctuation.
+  -- JSON: level 0 keys. Deeper levels come from queries/json via @spooky.json.keyN.
   ["@property.json"] = { fg = p.jsonKey0 },
-  ["@conceal.json"] = { fg = p.operatorMisc },
 
-  -- Python: the grammar leaves plain identifiers, imports and most types unscoped,
-  -- and colors most non-flow keywords as control keywords.
-  ["@variable.python"] = { fg = p.editorForeground },
-  ["@variable.member.python"] = { fg = p.editorForeground },
-  ["@constant.python"] = { fg = p.editorForeground },
+  -- Python: the grammar leaves plain identifiers, imports and most types unscoped. These
+  -- groups are empty rather than colored so the lower-priority call-argument capture
+  -- from queries/python can show through.
+  ["@variable.python"] = {},
+  ["@variable.member.python"] = {},
+  ["@constant.python"] = {},
   ["@module.python"] = { fg = p.editorForeground },
-  ["@type.python"] = { fg = p.editorForeground },
+  ["@type.python"] = {},
   ["@type.definition.python"] = { link = "Type" },
   ["@keyword.python"] = { link = "Conditional" },
+  ["@keyword.coroutine.python"] = { link = "Conditional" },
   ["@constructor.python"] = { link = "Function" },
-  ["@attribute.python"] = { fg = p.entityType },
+  ["@attribute.python"] = { link = "Function" },
   ["@attribute.builtin.python"] = { fg = p.entityType },
   ["@punctuation.special.python"] = { fg = p.string },
-  ["@variable.argument.python"] = { link = "Function" },
+  -- @none resets f-string interpolations, whose unscoped names take the editor foreground.
+  ["@none.python"] = { fg = p.editorForeground },
 
   -- Lua: the grammar scopes no punctuation, so brackets and separators stay plain.
   ["@punctuation.delimiter.lua"] = { fg = p.editorForeground },
   ["@punctuation.bracket.lua"] = { fg = p.editorForeground },
   ["@constructor.lua"] = { fg = p.editorForeground },
+  ["@variable.member.lua"] = { fg = p.editorForeground },
   ["@constant.lua"] = { link = "Identifier" },
   ["@keyword.function.lua"] = { link = "Conditional" },
+  ["@keyword.directive.lua"] = { link = "Comment" },
   ["@module.builtin.lua"] = { link = "Function" },
   ["@label.lua"] = { fg = p.number },
-  ["@punctuation.delimiter.label.lua"] = { link = "Delimiter" },
 
   -- Markdown: heading text is an entity name, paragraph text is near-white, and the
   -- emphasis, code span and link delimiters the query conceals are punctuation.
@@ -212,7 +243,7 @@ local groups = {
   ["@markup.list.markdown"] = { fg = p.operatorMisc },
   ["@markup.list.checked.markdown"] = { fg = p.operatorMisc },
   ["@markup.list.unchecked.markdown"] = { fg = p.operatorMisc },
-  ["@markup.raw.block.markdown"] = { fg = p.markdownRawInline },
+  ["@markup.raw.block.markdown"] = { fg = p.markdownPlain },
   ["@label.markdown"] = { fg = p.markdownPlain },
   ["@markup.quote.markdown"] = { fg = p.markdownPlain, italic = true },
   ["@markup.link.label.markdown"] = { fg = p.markdownLinkAnchor },
@@ -222,7 +253,8 @@ local groups = {
   ["@markup.link.label.markdown_inline"] = { fg = p.markdownLink },
   ["@markup.link.url.markdown_inline"] = { fg = p.markupUnderline, underline = true },
   ["@markup.raw.markdown_inline"] = { fg = p.markdownPlain },
-  ["@markup.strikethrough.markdown_inline"] = { fg = p.markdownPlain, strikethrough = true },
+  ["@markup.strong.markdown_inline"] = { fg = p.markupBold, bold = true, nocombine = true },
+  ["@markup.strikethrough.markdown_inline"] = { fg = p.markdownPlain },
   ["@string.escape.markdown_inline"] = { fg = p.escape },
 }
 

@@ -251,17 +251,36 @@ reasons no highlight group can fix: string quote marks are punctuation in every
 TextMate grammar but part of the string node in treesitter, variables inside
 blocks take `#d8d8d8` from the `meta.block variable.other` rule, round and
 square brackets are `meta.brace` with no color while braces are punctuation,
-and Markdown prose is `#EEFFFF` while treesitter gives it no capture.
+Markdown prose is `#EEFFFF` while treesitter gives it no capture, and JSON keys
+are colored by nesting depth.
 
 The port therefore ships `queries/<lang>/highlights.scm` files that start with
-`;; extends` and add captures for exactly those cases. Capture names are chosen
-so that another colorscheme sees no change: `@punctuation.delimiter.string`
-falls back to `@punctuation.delimiter`, `@variable.block` to `@variable`,
-`@punctuation.bracket.round` to `@punctuation.bracket`, `@markup.plain` to
-`@markup`, which nothing defines. The one exception considered and rejected is
-CSS `(plain_value)`, which has no base capture at all, so any new capture would
-recolor other themes; it stays a known difference.
+`;; extends`. Every capture they add is named `@spooky.*`. The first attempt
+used sub-captures of standard names such as `@punctuation.delimiter.string`
+on the theory that the fallback was neutral; the Codex review measured 446
+changed characters under the default colorscheme, because a fallback restores
+the standard group, not the capture that originally won on that node. Private
+names have no fallback, so other colorschemes render exactly as before while
+this theme supplies their highlights.
+
+Where a TextMate scope covers part of a treesitter node, the queries use
+`#offset!` ranges (Python string prefixes, HTML entities, the doctype
+attribute, checked task markers, autolinks) and `nocombine` to reset styles
+that Neovim would otherwise accumulate (bold-italic Markdown, parameter
+`self`). JSON key depth uses a predicate, `spooky-json-depth?`, registered
+from `plugin/spooky-scary.lua` so the queries parse under any colorscheme.
 
 The TypeScript base query loads after the ecma extension and re-captures
 capitalized identifiers, so `queries/typescript/highlights.scm` repeats the
 identifier rules from `queries/ecma/highlights.scm`.
+
+## Amendment, 2026-10-02: screen-based resolver
+
+`tools/compare/nvim-tokens.lua` resolves colors from
+`vim.treesitter.get_captures_at_pos`, which reports a node's original range
+and so ignores `#offset!`, and it accumulates style flags without honoring
+`nocombine`. Codex contributed `tools/compare/nvim-screen.lua`, which renders
+each sample in a real Neovim UI and reads the painted cells through
+`nvim__inspect_cell`. `run.sh` uses it by default inside a detached tmux
+session, since this harness often runs without a terminal; set
+`SPOOKY_RESOLVER=captures` for the faster approximation.
