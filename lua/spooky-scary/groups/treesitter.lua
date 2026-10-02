@@ -72,6 +72,19 @@ local groups = {
   ["@punctuation.bracket"] = { link = "Delimiter" },
   ["@punctuation.special"] = { link = "Delimiter" },
 
+  -- Captures added by this repo's queries/ extensions, named so other colorschemes
+  -- fall back to the standard capture.
+  ["@punctuation.bracket.round"] = { fg = p.editorForeground },
+  ["@punctuation.bracket.square"] = { fg = p.editorForeground },
+  ["@punctuation.delimiter.string"] = { link = "Delimiter" },
+  ["@punctuation.delimiter.type"] = { link = "Keyword" },
+  ["@punctuation.bracket.pattern"] = { link = "Delimiter" },
+  ["@punctuation.delimiter.annotation"] = { link = "Delimiter" },
+  ["@punctuation.bracket.parameters"] = { link = "Delimiter" },
+  ["@punctuation.delimiter.parameters"] = { link = "Delimiter" },
+  ["@variable.block"] = { fg = p.blockVariable },
+  ["@markup.plain"] = { fg = p.markdownPlain },
+
   ["@markup.strong"] = { fg = p.markupBold, bold = true },
   ["@markup.italic"] = { fg = p.markupItalic, italic = true },
   ["@markup.strikethrough"] = { strikethrough = true },
@@ -111,6 +124,11 @@ local groups = {
   ["@property.javascript"] = { fg = p.editorForeground },
   ["@property.typescript"] = { fg = p.editorForeground },
   ["@property.tsx"] = { fg = p.editorForeground },
+  ["@variable.member.key"] = { fg = p.editorForeground },
+  -- @none marks JSX text and template substitutions, both meta.tag or embedded punctuation.
+  ["@none.javascript"] = { fg = p.operatorMisc },
+  ["@none.typescript"] = { fg = p.operatorMisc },
+  ["@none.tsx"] = { fg = p.operatorMisc },
 
   -- HTML: attributes are italic orange only inside text.html.basic, and text inside
   -- elements has no rule, so headings, links and emphasis stay plain.
@@ -135,6 +153,7 @@ local groups = {
   ["@constant.css"] = { fg = p.attribute },
   ["@keyword.modifier.css"] = { fg = p.number },
   ["@string.css"] = { fg = p.string },
+  ["@string.color.css"] = { fg = p.operatorMisc },
   ["@tag.css"] = { fg = p.tag },
   ["@attribute.css"] = { fg = p.attribute },
 
@@ -154,6 +173,7 @@ local groups = {
   ["@attribute.python"] = { fg = p.entityType },
   ["@attribute.builtin.python"] = { fg = p.entityType },
   ["@punctuation.special.python"] = { fg = p.string },
+  ["@variable.argument.python"] = { link = "Function" },
 
   -- Lua: the grammar scopes no punctuation, so brackets and separators stay plain.
   ["@punctuation.delimiter.lua"] = { fg = p.editorForeground },
