@@ -16,6 +16,20 @@
 (string ["\"" "'"] @punctuation.delimiter.string)
 (template_string "`" @punctuation.delimiter.string)
 
+; Capitalized identifiers in value positions are plain variables in TextMate; the
+; nvim-treesitter query guesses they are types.
+((identifier) @variable.capitalized
+  (#lua-match? @variable.capitalized "^[A-Z]")
+  (#not-has-parent? @variable.capitalized class_declaration class_heritage extends_clause new_expression call_expression enum_declaration function_declaration generator_function_declaration function_expression))
+
+; Inherited classes are entity.other.inherited-class, the constructor method is
+; storage.type, and `in`/`of` in loops are keyword.operator.expression.
+(method_definition name: (property_identifier) @constructor.keyword
+  (#eq? @constructor.keyword "constructor"))
+(for_in_statement ["in" "of"] @keyword.operator)
+(await_expression "await" @keyword.coroutine.await)
+(export_statement "default" @keyword.default)
+
 ; The theme's `meta.block variable.other` rule: variables inside statement blocks,
 ; class bodies and import lists. Function names, constructors and parameters keep
 ; their own scopes in TextMate, so they are excluded.

@@ -10,3 +10,6 @@
 ((identifier) @variable.argument
   (#has-ancestor? @variable.argument argument_list generator_expression)
   (#not-has-parent? @variable.argument keyword_argument))
+
+; Superclasses are entity.other.inherited-class, not call arguments.
+(class_definition superclasses: (argument_list (identifier) @type.inherited))
