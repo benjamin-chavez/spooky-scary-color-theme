@@ -66,3 +66,30 @@ Resources and guides:
 
 [Ivan Stevkovski's](https://www.linkedin.com/in/istevkovski/?originalSubdomain=mk) guide to make a VS Code theme: [Create Your Own Custom Theme Extension](https://medium.com/wearelaika/vscode-create-your-own-custom-theme-extension-96c67bd753f6)
 
+
+## Neovim
+
+The theme ships as a Neovim colorscheme on the `nvim-fork` branch. With lazy.nvim:
+
+```lua
+{
+  "rojhanpaydar/spooky-scary-color-theme",
+  branch = "nvim-fork",
+  priority = 1000,
+  config = function()
+    vim.cmd.colorscheme("spooky-scary")
+  end,
+}
+```
+
+It requires `termguicolors` and uses treesitter captures. A lualine theme is included under the
+same name, and highlight groups are defined for bufferline, nvim-tree, telescope, gitsigns,
+nvim-cmp, indent-blankline, which-key, render-markdown and todo-comments.
+
+The repo also ships small `queries/*/highlights.scm` extensions so Neovim can color string
+quotes, brackets, block-scoped variables and Markdown prose the way VS Code's TextMate
+grammars do. Their capture names fall back to the standard captures, so other colorschemes
+are unaffected.
+
+The colors are verified against VS Code's own tokenizer by `tools/compare/run.sh`. Differences
+treesitter cannot express are listed with reasons in `tools/compare/known-differences.json`.
