@@ -2,7 +2,7 @@
 # Every opaque hex literal in the palette must appear in the theme JSON.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
-theme="themes/Spooky Scary Color Theme-color-theme.json"
+theme="tools/compare/reference/Spooky Scary Color Theme-color-theme.json"
 status=0
 while read -r hex; do
   if ! grep -qi -- "$hex" "$theme"; then

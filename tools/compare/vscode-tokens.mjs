@@ -12,7 +12,7 @@ const require = createRequire(import.meta.url);
 const vsctm = require("vscode-textmate");
 const oniguruma = require("vscode-oniguruma");
 const repoRoot = path.resolve(here, "../..");
-const themePath = path.join(repoRoot, "themes/Spooky Scary Color Theme-color-theme.json");
+const themePath = path.join(here, "reference/Spooky Scary Color Theme-color-theme.json");
 const extensionsDir =
   process.env.VSCODE_EXTENSIONS_DIR ??
   "/Applications/Visual Studio Code.app/Contents/Resources/app/extensions";

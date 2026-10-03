@@ -1,3 +1,8 @@
+// Spooky Scary Color Theme for VS Code, by rothecoder (Ro).
+// Source: https://github.com/rojhanpaydar/spooky-scary-color-theme, commit 8396f5a, version 0.0.12.
+// Kept here unchanged as the reference the Neovim port is verified against by tools/compare/run.sh.
+// It is not packaged or installable from this repository; install the VS Code theme from the
+// Marketplace: https://marketplace.visualstudio.com/items?itemName=rothecoder.spooky-scary-color-theme
 {
   "name": "Spooky Scary Color Theme",
   "type": "dark",
