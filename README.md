@@ -103,10 +103,11 @@ require("spooky-scary.haunt").setup({
 })
 ```
 
-Every twenty characters typed in insert mode, a small purple ghost rises out of the cursor
-line and vanishes, the way it does in the preview at the top of this README. In Ghostty, Kitty
-or WezTerm it is the README's GIF drawn with the Kitty graphics protocol, cropped and tinted to
-match Power Mode's rendering. In other terminals, or inside tmux, a ghost glyph rises and fades
+Every twenty characters typed in insert mode, a small ghost rises out of the cursor line and
+vanishes, the way it does in the preview at the top of this README. Like Power Mode's mask
+mode, it takes the color of whatever you are typing: purple in plain text, green in a tag,
+orange in a string. In Ghostty, Kitty or WezTerm it is the README's GIF drawn with the Kitty
+graphics protocol, cropped to the part Power Mode shows and pre-tinted for each theme color. In other terminals, or inside tmux, a ghost glyph rises and fades
 instead. `:SpookyHaunt` summons it on demand, `graphics = "text"` forces the glyph version, and
 `columns`, `rows` and `column_offset` move or resize it. `frames.lua` and the PNG frames under
 `assets/ghost` come from `tools/ghost-frames.sh`.

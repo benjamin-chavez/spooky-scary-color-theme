@@ -9,9 +9,9 @@ local palette = require("spooky-scary.palette")
 local defaults = {
   frequency = 20,
   frame_ms = nil, -- defaults to the GIF's own timing from assets/ghost/frames.lua
-  columns = 3, -- width of the image ghost in terminal cells; 3 by 1 keeps the frames' aspect
-  rows = 1, -- height of the image ghost in terminal cells
-  column_offset = -2, -- cells left of the cursor where the ghost box starts, so it rises over the last typed characters
+  columns = 6, -- width of the image ghost in terminal cells; 6 by 2 keeps the frames' aspect
+  rows = 2, -- height of the image ghost in terminal cells
+  column_offset = -3, -- cells left of the cursor where the ghost box starts, centering it on the cursor
   graphics = "auto", -- "auto", "kitty" or "text"
 }
 
@@ -66,17 +66,68 @@ local function graphics_command(control, payload)
   return "\27_G" .. control .. (payload and (";" .. payload) or "") .. "\27\\"
 end
 
--- Image ids are arbitrary but must not collide with other plugins; 7777 leaves room for frames.
-local IMAGE_ID_BASE = 7777
+-- Image ids are arbitrary but must not collide with other plugins. Each color set gets a
+-- block of 100 ids above 7700.
+local IMAGE_ID_BASE = 7700
 
--- Sends every frame once as PNG data in 4096-byte chunks. q=2 suppresses terminal replies,
--- which would otherwise land in Neovim's input.
-local function transmit_frames(meta)
+local function image_id(set_index, frame_index)
+  return IMAGE_ID_BASE + set_index * 100 + frame_index
+end
+
+-- Power Mode's mask mode fills the ghost with the color of the token under the cursor. This
+-- resolves that color the way the highlighter does: the last capture with a foreground wins.
+local function cursor_token_color()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  col = math.max(0, col - 1)
+  local ok, info = pcall(vim.inspect_pos, 0, row - 1, col)
+  local color = nil
+  if ok then
+    for _, item in ipairs(info.treesitter or {}) do
+      local hl = vim.api.nvim_get_hl(0, { name = item.hl_group_link or item.hl_group, link = false })
+      if hl.fg then color = hl.fg end
+    end
+    if not color then
+      for _, item in ipairs(info.syntax or {}) do
+        local hl = vim.api.nvim_get_hl(0, { name = item.hl_group_link or item.hl_group, link = false })
+        if hl.fg then color = hl.fg end
+      end
+    end
+  end
+  color = color or vim.api.nvim_get_hl(0, { name = "Normal", link = false }).fg
+  return color and string.format("#%06x", color) or palette.editorForeground
+end
+
+local function rgb(hex)
+  return tonumber(hex:sub(2, 3), 16), tonumber(hex:sub(4, 5), 16), tonumber(hex:sub(6, 7), 16)
+end
+
+-- Index of the pre-tinted frame set nearest to a color.
+local function nearest_set(meta, hex)
+  local r, g, b = rgb(hex)
+  local best, best_distance = 1, math.huge
+  for index, candidate in ipairs(meta.colors) do
+    local cr, cg, cb = rgb(candidate)
+    local distance = (r - cr) ^ 2 + (g - cg) ^ 2 + (b - cb) ^ 2
+    if distance < best_distance then
+      best, best_distance = index, distance
+    end
+  end
+  return best
+end
+
+-- Sends one color set's frames as PNG data in 4096-byte chunks, once. q=2 suppresses terminal
+-- replies, which would otherwise land in Neovim's input.
+local transmitted_sets = {}
+local function transmit_frames(meta, set_index)
+  if transmitted_sets[set_index] then
+    return
+  end
+  local directory = asset_dir .. "/" .. meta.colors[set_index]:sub(2)
   for index, name in ipairs(meta.frames) do
-    local file = assert(io.open(asset_dir .. "/" .. name, "rb"))
+    local file = assert(io.open(directory .. "/" .. name, "rb"))
     local encoded = vim.base64.encode(file:read("*a"))
     file:close()
-    local id = IMAGE_ID_BASE + index
+    local id = image_id(set_index, index)
     local position = 1
     local first = true
     while position <= #encoded do
@@ -88,21 +139,24 @@ local function transmit_frames(meta)
       first = false
     end
   end
+  transmitted_sets[set_index] = true
   state.transmitted = true
 end
 
 local function delete_placements()
-  for index = 1, #state.frames.frames do
-    write_terminal(graphics_command(string.format("a=d,d=i,i=%d,q=2", IMAGE_ID_BASE + index)))
+  for set_index in pairs(transmitted_sets) do
+    for index = 1, #state.frames.frames do
+      write_terminal(graphics_command(string.format("a=d,d=i,i=%d,q=2", image_id(set_index, index))))
+    end
   end
 end
 
 -- Places one frame at a terminal cell. The cursor is saved, moved, and restored so Neovim's own
 -- cursor position is untouched; C=1 keeps the terminal from advancing it after the image.
-local function place_frame(index, row, col)
+local function place_frame(set_index, index, row, col)
   local control = string.format(
     "a=p,i=%d,c=%d,r=%d,C=1,z=1000,q=2",
-    IMAGE_ID_BASE + index, state.options.columns, state.options.rows
+    image_id(set_index, index), state.options.columns, state.options.rows
   )
   write_terminal(string.format("\0277\27[%d;%dH%s\0278", row, col, graphics_command(control)))
 end
@@ -118,10 +172,9 @@ local function anchor_cell()
   return row, col
 end
 
-local function play_image(meta)
-  if not state.transmitted then
-    transmit_frames(meta)
-  end
+local function play_image(meta, color)
+  local set_index = nearest_set(meta, color)
+  transmit_frames(meta, set_index)
   local row, col = anchor_cell()
   if not row then
     state.playing = false
@@ -132,7 +185,7 @@ local function play_image(meta)
   local timer = vim.uv.new_timer()
   timer:start(0, delay, vim.schedule_wrap(function()
     if index > 0 then
-      write_terminal(graphics_command(string.format("a=d,d=i,i=%d,q=2", IMAGE_ID_BASE + index)))
+      write_terminal(graphics_command(string.format("a=d,d=i,i=%d,q=2", image_id(set_index, index))))
     end
     index = index + 1
     if index > #meta.frames then
@@ -141,16 +194,16 @@ local function play_image(meta)
       state.playing = false
       return
     end
-    place_frame(index, row, col)
+    place_frame(set_index, index, row, col)
   end))
 end
 
 -- Text fallback: a ghost glyph in a floating window that rises a row and fades from the
--- editor foreground purple into the background.
+-- cursor token's color into the background.
 local GLYPH = "󰊠"
 local TEXT_FRAMES = 6
 
-local function play_text()
+local function play_text(color)
   local total = TEXT_FRAMES
   local buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, { GLYPH })
@@ -181,8 +234,8 @@ local function play_text()
       return
     end
     local alpha = string.format("%02x", math.floor(255 * (1 - (index - 1) / total)))
-    local color = palette.blend(palette.editorForeground .. alpha, palette.editorBackground)
-    vim.api.nvim_set_hl(0, "SpookyHauntGhost", { fg = color, bg = "NONE" })
+    local faded = palette.blend(color .. alpha, palette.editorBackground)
+    vim.api.nvim_set_hl(0, "SpookyHauntGhost", { fg = faded, bg = "NONE" })
     vim.wo[win].winhighlight = "Normal:SpookyHauntGhost,NormalFloat:SpookyHauntGhost"
     vim.api.nvim_win_set_config(win, {
       relative = "win",
@@ -197,11 +250,12 @@ function M.haunt()
     return
   end
   state.playing = true
+  local color = cursor_token_color()
   local meta = load_frames()
   if meta and kitty_supported() then
-    play_image(meta)
+    play_image(meta, color)
   else
-    play_text()
+    play_text(color)
   end
 end
 

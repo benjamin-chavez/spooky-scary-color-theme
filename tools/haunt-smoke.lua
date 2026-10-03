@@ -17,6 +17,7 @@ vim.api.nvim_win_set_cursor(0, { 4, 5 })
 for _ = 1, 3 do vim.api.nvim_exec_autocmds("InsertCharPre", {}) end
 vim.wait(1000, function() return false end, 50)
 local all = table.concat(written)
+assert(#meta.colors >= 10, "expected a tint set per token color")
 local transmits = select(2, all:gsub("a=t,t=d,f=100", ""))
 local places = select(2, all:gsub("a=p,i=", ""))
 local deletes = select(2, all:gsub("a=d,d=i", ""))
@@ -39,3 +40,26 @@ for _, w in ipairs(vim.api.nvim_list_wins()) do if vim.api.nvim_win_get_config(w
 print(string.format("text path: float seen=%s, floats left=%d, terminal bytes=%d", tostring(saw_float), floats, #table.concat(written)))
 assert(saw_float and floats == 0 and #table.concat(written) == 0)
 print("haunt smoke ok")
+
+-- Color selection: with the cursor on a Lua string the tint set differs from the plain-text one.
+written = {}
+vim.api.nvim_chan_send = function(_, s) written[#written + 1] = s end
+haunt.setup({ frequency = 1, graphics = "kitty" })
+vim.opt.rtp:prepend(vim.fn.expand("~/.local/share/nvim/lazy/nvim-treesitter"))
+vim.cmd("enew")
+vim.api.nvim_buf_set_lines(0, 0, -1, false, { "", "local greeting = 'boo'" })
+vim.bo.filetype = "lua"
+vim.treesitter.start(0, "lua")
+vim.treesitter.get_parser(0, "lua"):parse(true)
+vim.api.nvim_win_set_cursor(0, { 2, 20 })
+vim.api.nvim_exec_autocmds("InsertCharPre", {})
+vim.wait(1000, function() return false end, 50)
+local on_string = table.concat(written):match("a=p,i=(%d+)")
+written = {}
+vim.api.nvim_win_set_cursor(0, { 2, 8 })
+vim.api.nvim_exec_autocmds("InsertCharPre", {})
+vim.wait(1000, function() return false end, 50)
+local on_variable = table.concat(written):match("a=p,i=(%d+)")
+print(string.format("tint sets: string token -> id %s, variable token -> id %s", on_string, on_variable))
+assert(on_string and on_variable and math.floor(on_string / 100) ~= math.floor(on_variable / 100), "different tokens should pick different tint sets")
+print("color selection ok")
