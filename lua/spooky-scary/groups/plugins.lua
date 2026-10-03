@@ -52,7 +52,10 @@ return {
 	NvimTreeExecFile = { fg = p.foreground },
 	NvimTreeImageFile = { fg = p.foreground },
 	NvimTreeSymlink = { fg = p.foreground },
-	NvimTreeIndentMarker = { fg = p.activityBarBadgeBackground },
+	-- Chevrons use icon.foreground; guides use VS Code's default tree.indentGuidesStroke.
+	NvimTreeFolderArrowClosed = { fg = p.iconForeground },
+	NvimTreeFolderArrowOpen = { fg = p.iconForeground },
+	NvimTreeIndentMarker = { fg = "#585858" },
 	NvimTreeGitDirty = { fg = "#e2c08d" },
 	NvimTreeGitStaged = { fg = "#e2c08d" },
 	NvimTreeGitMerge = { fg = p.gitConflicting },
