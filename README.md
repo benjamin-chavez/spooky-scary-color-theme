@@ -103,11 +103,13 @@ require("spooky-scary.haunt").setup({
 })
 ```
 
-Every twenty characters typed in insert mode, the ghost rises out of the line above the cursor.
-In Ghostty, Kitty or WezTerm it is the README's GIF drawn with the Kitty graphics protocol. In
-other terminals, or inside tmux, a ghost glyph rises and fades in the theme's green instead.
-`:SpookyHaunt` summons it on demand, and `graphics = "text"` forces the glyph version.
-`frames.lua` and the PNG frames under `assets/ghost` come from `tools/ghost-frames.sh`.
+Every twenty characters typed in insert mode, a small purple ghost rises out of the cursor
+line and vanishes, the way it does in the preview at the top of this README. In Ghostty, Kitty
+or WezTerm it is the README's GIF drawn with the Kitty graphics protocol, cropped and tinted to
+match Power Mode's rendering. In other terminals, or inside tmux, a ghost glyph rises and fades
+instead. `:SpookyHaunt` summons it on demand, `graphics = "text"` forces the glyph version, and
+`columns`, `rows` and `column_offset` move or resize it. `frames.lua` and the PNG frames under
+`assets/ghost` come from `tools/ghost-frames.sh`.
 
 The colors are verified against VS Code's own tokenizer by `tools/compare/run.sh`, which needs
 Node, tmux and a local VS Code install for its grammars. It paints each sample in a real Neovim

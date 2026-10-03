@@ -1,6 +1,7 @@
--- A ghost pops up above the cursor every N keystrokes, like the Power Mode setup in the README.
--- In a terminal that speaks the Kitty graphics protocol (Ghostty, Kitty, WezTerm) it plays the
--- README's ghost GIF; elsewhere it animates a glyph that rises and fades.
+-- A ghost rises out of the cursor line every N keystrokes, like the Power Mode setup in the
+-- README: a small purple silhouette, about one cell tall, gone in a quarter second. In a
+-- terminal that speaks the Kitty graphics protocol (Ghostty, Kitty, WezTerm) it plays the
+-- README's ghost GIF frames; elsewhere it animates a glyph that rises and fades.
 local M = {}
 
 local palette = require("spooky-scary.palette")
@@ -8,8 +9,9 @@ local palette = require("spooky-scary.palette")
 local defaults = {
   frequency = 20,
   frame_ms = nil, -- defaults to the GIF's own timing from assets/ghost/frames.lua
-  columns = 6, -- width of the image ghost in terminal cells; 6 by 4 keeps the frames' aspect
-  rows = 4, -- height of the image ghost in terminal cells
+  columns = 3, -- width of the image ghost in terminal cells; 3 by 1 keeps the frames' aspect
+  rows = 1, -- height of the image ghost in terminal cells
+  column_offset = -2, -- cells left of the cursor where the ghost box starts, so it rises over the last typed characters
   graphics = "auto", -- "auto", "kitty" or "text"
 }
 
@@ -112,7 +114,7 @@ local function anchor_cell()
     return nil
   end
   local row = math.max(1, screen.row - state.options.rows)
-  local col = math.max(1, math.min(screen.col, vim.o.columns - state.options.columns))
+  local col = math.max(1, math.min(screen.col + state.options.column_offset, vim.o.columns - state.options.columns))
   return row, col
 end
 
@@ -143,10 +145,10 @@ local function play_image(meta)
   end))
 end
 
--- Text fallback: a ghost glyph in a floating window that rises one row per frame while its
--- color fades from the theme's green into the editor background.
+-- Text fallback: a ghost glyph in a floating window that rises a row and fades from the
+-- editor foreground purple into the background.
 local GLYPH = "󰊠"
-local TEXT_FRAMES = 8
+local TEXT_FRAMES = 6
 
 local function play_text()
   local total = TEXT_FRAMES
@@ -157,7 +159,7 @@ local function play_text()
   local win = vim.api.nvim_open_win(buf, false, {
     relative = "win",
     row = math.max(0, cursor_row - 2),
-    col = math.max(0, cursor_col - 1),
+    col = math.max(0, cursor_col - 2),
     width = 2,
     height = 1,
     style = "minimal",
@@ -167,7 +169,7 @@ local function play_text()
   })
   local index = 0
   local timer = vim.uv.new_timer()
-  timer:start(0, 70, vim.schedule_wrap(function()
+  timer:start(0, 45, vim.schedule_wrap(function()
     index = index + 1
     if index > total or not vim.api.nvim_win_is_valid(win) then
       timer:stop()
@@ -179,13 +181,13 @@ local function play_text()
       return
     end
     local alpha = string.format("%02x", math.floor(255 * (1 - (index - 1) / total)))
-    local color = palette.blend(palette.foreground .. alpha, palette.editorBackground)
+    local color = palette.blend(palette.editorForeground .. alpha, palette.editorBackground)
     vim.api.nvim_set_hl(0, "SpookyHauntGhost", { fg = color, bg = "NONE" })
     vim.wo[win].winhighlight = "Normal:SpookyHauntGhost,NormalFloat:SpookyHauntGhost"
     vim.api.nvim_win_set_config(win, {
       relative = "win",
-      row = math.max(0, cursor_row - 1 - index),
-      col = math.max(0, cursor_col - 1),
+      row = math.max(0, cursor_row - 1 - math.floor(index / 3)),
+      col = math.max(0, cursor_col - 2),
     })
   end))
 end
