@@ -3,6 +3,10 @@
 Date: 2026-10-02
 Branch: nvim-fork
 
+> The two amendments at the end of this document supersede parts of the body: the port ships
+> private `@spooky.*` query captures, and the harness reads painted screen cells. Read those
+> first. The reconciliation log records how each decision was reached.
+
 ## Goal
 
 Port the VS Code theme in `themes/Spooky Scary Color Theme-color-theme.json`

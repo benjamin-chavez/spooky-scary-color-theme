@@ -31,7 +31,7 @@ Codex reviews them in round 1.
 ## Round 1
 
 Codex's report is `docs/superpowers/specs/2026-10-02-nvim-port-codex-round1.md`
-in its worktree. It ended with DISAGREEMENT, naming JSON key depth as the
+(copied here from its worktree). It ended with DISAGREEMENT, naming JSON key depth as the
 largest remaining issue, and brought its own port to 73 differing characters.
 
 ### Agreed changes, applied to the author's port
@@ -91,7 +91,7 @@ raw-string regex tokens.
 ## Round 2
 
 Codex's report is `docs/superpowers/specs/2026-10-02-nvim-port-codex-round2.md`
-in its worktree. It reproduced the 22-character result with the screen
+(copied here from its worktree). It reproduced the 22-character result with the screen
 inspector, accepted the predicate registration and depth counting (verified on
 extra fixtures through depth ten, with arrays between objects and a root
 array), accepted `@none.python`, accepted all five known-differences entries,
@@ -120,8 +120,10 @@ Codex re-ran its Python call fixture (twelve calls including `Exception()`,
 `memoryview()`) against the port with the screen inspector: 0 of 137
 characters differ. It re-ran the nine samples: 22 of 6985 characters differ,
 0 unexplained runs, 5 known-difference runs. Its report is
-`docs/superpowers/specs/2026-10-02-nvim-port-codex-round3.md` in its worktree
-and ends with the agreement line.
+`docs/superpowers/specs/2026-10-02-nvim-port-codex-round3.md` and ends with the
+agreement line. Codex's original port notes are in
+`2026-10-02-nvim-port-codex-notes.md`. Its worktree and branch were removed after
+round 3.
 
 ## Outcome
 
