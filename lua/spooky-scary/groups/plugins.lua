@@ -1,35 +1,37 @@
 local p = require("spooky-scary.palette")
 
 return {
-	-- bufferline: tabs from the VS Code tab colors.
+	-- bufferline: tabs from the VS Code tab colors. VS Code renders the active tab in the editor
+	-- background against the darker tab bar, so the selected groups use that instead of
+	-- tab.activeBackground, which the JSON sets to the same color as the bar.
 	BufferLineFill = { bg = p.tabsBackground },
 	BufferLineBackground = { fg = p.statusBarForeground, bg = p.tabInactiveBackground },
 	BufferLineBuffer = { fg = p.statusBarForeground, bg = p.tabInactiveBackground },
 	BufferLineBufferVisible = { fg = p.statusBarForeground, bg = p.tabActiveBackground },
-	BufferLineBufferSelected = { fg = p.tabActiveForeground, bg = p.tabActiveBackground, bold = true },
+	BufferLineBufferSelected = { fg = p.tabActiveForeground, bg = p.editorBackground, bold = true },
 	BufferLineSeparator = { fg = p.tabsBackground, bg = p.tabInactiveBackground },
 	BufferLineSeparatorVisible = { fg = p.tabsBackground, bg = p.tabActiveBackground },
-	BufferLineSeparatorSelected = { fg = p.tabsBackground, bg = p.tabActiveBackground },
-	BufferLineIndicatorSelected = { fg = p.focusBorder, bg = p.tabActiveBackground },
+	BufferLineSeparatorSelected = { fg = p.tabsBackground, bg = p.editorBackground },
+	BufferLineIndicatorSelected = { fg = p.editorBackground, bg = p.editorBackground },
 	BufferLineIndicatorVisible = { fg = p.tabActiveBackground, bg = p.tabActiveBackground },
 	BufferLineModified = { fg = p.foreground, bg = p.tabInactiveBackground },
 	BufferLineModifiedVisible = { fg = p.foreground, bg = p.tabActiveBackground },
-	BufferLineModifiedSelected = { fg = p.foreground, bg = p.tabActiveBackground },
+	BufferLineModifiedSelected = { fg = p.foreground, bg = p.editorBackground },
 	BufferLineCloseButton = { fg = p.statusBarForeground, bg = p.tabInactiveBackground },
 	BufferLineCloseButtonVisible = { fg = p.statusBarForeground, bg = p.tabActiveBackground },
-	BufferLineCloseButtonSelected = { fg = p.tabActiveForeground, bg = p.tabActiveBackground },
+	BufferLineCloseButtonSelected = { fg = p.tabActiveForeground, bg = p.editorBackground },
 	BufferLineTab = { fg = p.statusBarForeground, bg = p.tabInactiveBackground },
-	BufferLineTabSelected = { fg = p.tabActiveForeground, bg = p.tabActiveBackground },
+	BufferLineTabSelected = { fg = p.tabActiveForeground, bg = p.editorBackground },
 	BufferLineTabSeparator = { fg = p.tabsBackground, bg = p.tabInactiveBackground },
-	BufferLineTabSeparatorSelected = { fg = p.tabsBackground, bg = p.tabActiveBackground },
+	BufferLineTabSeparatorSelected = { fg = p.tabsBackground, bg = p.editorBackground },
 	BufferLineTabClose = { fg = p.statusBarForeground, bg = p.tabsBackground },
 	BufferLineDuplicate = { fg = p.statusBarForeground, bg = p.tabInactiveBackground, italic = true },
 	BufferLineDuplicateVisible = { fg = p.statusBarForeground, bg = p.tabActiveBackground, italic = true },
-	BufferLineDuplicateSelected = { fg = p.tabActiveForeground, bg = p.tabActiveBackground, italic = true },
+	BufferLineDuplicateSelected = { fg = p.tabActiveForeground, bg = p.editorBackground, italic = true },
 	BufferLineError = { fg = p.editorErrorForeground, bg = p.tabInactiveBackground },
-	BufferLineErrorSelected = { fg = p.editorErrorForeground, bg = p.tabActiveBackground, bold = true },
+	BufferLineErrorSelected = { fg = p.editorErrorForeground, bg = p.editorBackground, bold = true },
 	BufferLineWarning = { fg = p.number, bg = p.tabInactiveBackground },
-	BufferLineWarningSelected = { fg = p.number, bg = p.tabActiveBackground, bold = true },
+	BufferLineWarningSelected = { fg = p.number, bg = p.editorBackground, bold = true },
 
 	-- nvim-tree: the VS Code side bar. Every name takes the sidebar foreground, as in the
 	-- Explorer, and git states take VS Code's default gitDecoration colors, which the theme

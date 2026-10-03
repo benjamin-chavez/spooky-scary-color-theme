@@ -48,7 +48,7 @@ return {
 
   TabLine = { fg = p.statusBarForeground, bg = p.tabInactiveBackground },
   TabLineFill = { bg = p.tabsBackground },
-  TabLineSel = { fg = p.tabActiveForeground, bg = p.tabActiveBackground },
+  TabLineSel = { fg = p.tabActiveForeground, bg = p.editorBackground },
 
   Pmenu = { fg = p.foreground, bg = p.menuBackground },
   PmenuSel = { fg = p.menuBackground, bg = p.menuSelectionBackground },
