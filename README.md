@@ -92,6 +92,23 @@ TextMate grammars do. They only add private `@spooky.*` captures, which no other
 defines, so switching themes renders exactly as before. `plugin/spooky-scary.lua` registers
 the one query predicate they use.
 
+### The ghost
+
+The Power Mode ghost from above works in Neovim too, without Power Mode. Enable it after the
+colorscheme loads:
+
+```lua
+require("spooky-scary.haunt").setup({
+  frequency = 20, -- keystrokes between hauntings, like powermode.explosions.frequency
+})
+```
+
+Every twenty characters typed in insert mode, the ghost rises out of the line above the cursor.
+In Ghostty, Kitty or WezTerm it is the README's GIF drawn with the Kitty graphics protocol. In
+other terminals, or inside tmux, a ghost glyph rises and fades in the theme's green instead.
+`:SpookyHaunt` summons it on demand, and `graphics = "text"` forces the glyph version.
+`frames.lua` and the PNG frames under `assets/ghost` come from `tools/ghost-frames.sh`.
+
 The colors are verified against VS Code's own tokenizer by `tools/compare/run.sh`, which needs
 Node, tmux and a local VS Code install for its grammars. It paints each sample in a real Neovim
 and diffs every character. The few remaining differences are listed with reasons in
