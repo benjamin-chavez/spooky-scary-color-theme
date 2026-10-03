@@ -1,0 +1,40 @@
+/* Base styles */
+@import url("fonts.css");
+@charset "utf-8";
+
+:root {
+  --pumpkin: #fca03f;
+  --ghost: rgba(255, 255, 255, 0.8);
+}
+
+body {
+  margin: 0;
+  padding: 1rem 2em;
+  color: var(--pumpkin);
+  background-color: #23242b;
+  font-family: "Creepster", sans-serif;
+}
+
+.banner > h1,
+#top .title:hover {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  text-transform: uppercase !important;
+}
+
+a[href^="https"]::after {
+  content: " (external)";
+}
+
+@media (max-width: 600px) and (orientation: portrait) {
+  .banner {
+    display: none;
+    width: calc(100% - 20px);
+  }
+}
+
+@keyframes flicker {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}

@@ -1,2 +1,4 @@
 node_modules
 *.vsix
+tools/compare/out/
+tools/compare/node_modules/

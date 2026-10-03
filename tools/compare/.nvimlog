@@ -1,0 +1,4 @@
+WRN 2026-10-02T02:19:40.502 ?.97242    server_start:199: Failed to start server: operation not permitted: /var/folders/2x/dx11zdrj6971tc69m2m4jwzh0000gn/T/nvim.benjaminchavez/Vs6ADy/nvim.97242.0
+WRN 2026-10-02T02:20:36.313 ?.97903    server_start:199: Failed to start server: operation not permitted: /var/folders/2x/dx11zdrj6971tc69m2m4jwzh0000gn/T/nvim.benjaminchavez/1EPQit/nvim.97903.0
+WRN 2026-10-02T02:25:55.009 ?.99265    server_start:199: Failed to start server: operation not permitted: /var/folders/2x/dx11zdrj6971tc69m2m4jwzh0000gn/T/nvim.benjaminchavez/dsdB4c/nvim.99265.0
+WRN 2026-10-02T02:36:34.660 ?.99894    server_start:199: Failed to start server: operation not permitted: /var/folders/2x/dx11zdrj6971tc69m2m4jwzh0000gn/T/nvim.benjaminchavez/363BzK/nvim.99894.0

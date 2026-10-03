@@ -1,0 +1,10 @@
+{
+  "name": "spooky-scary-compare",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "jsonc-parser": "^3.3.1",
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.3.2"
+  }
+}

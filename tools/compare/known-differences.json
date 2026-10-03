@@ -1,0 +1,37 @@
+[
+  {
+    "sample": "sample.lua",
+    "vscode": "#894fe0 italic",
+    "nvim": "#679e63 italic",
+    "text": "^@param$",
+    "reason": "LuaDoc tag inside a comment (storage.type.annotation.lua). The luadoc treesitter parser is not installed in this environment, so the whole comment is @comment. Installing it and mapping its captures would close this."
+  },
+  {
+    "sample": "sample.lua",
+    "vscode": "#ffcb6b italic",
+    "nvim": "#679e63 italic",
+    "text": "^name$",
+    "reason": "LuaDoc parameter name (entity.name.variable.lua) inside a comment. Same missing luadoc parser as the @param entry."
+  },
+  {
+    "sample": "sample.lua",
+    "vscode": "#f17008 italic",
+    "nvim": "#679e63 italic",
+    "text": "^string$",
+    "reason": "LuaDoc type (support.type.lua) inside a comment. Same missing luadoc parser as the @param entry."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#89ddff",
+    "nvim": "#fca03f",
+    "text": "^raw\\\\s$",
+    "reason": "The Python TextMate grammar scopes raw strings as string.regexp. Matching it needs a regex injection into raw strings, and injection queries apply under every colorscheme, so the port leaves raw strings as plain strings."
+  },
+  {
+    "sample": "sample.py",
+    "vscode": "#894fe0",
+    "nvim": "#fca03f",
+    "text": "^\\+$",
+    "reason": "Regex quantifier inside a raw string. See the raw string entry."
+  }
+]
