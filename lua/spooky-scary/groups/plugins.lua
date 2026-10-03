@@ -192,11 +192,11 @@ return {
 	TodoFgTEST = { fg = p.regexp },
 	TodoSignTEST = { fg = p.regexp },
 
-	-- -- alpha-nvim dashboard: the logo in the theme's lime green, buttons in link purple.
-	-- AlphaHeader = { fg = p.foreground },
-	-- AlphaButtons = { fg = p.textLinkForeground },
-	-- AlphaShortcut = { fg = p.number },
-	-- AlphaFooter = { fg = p.statusBarForeground, italic = true },
+	-- alpha-nvim dashboard: the logo in the theme's lime green, buttons in link purple.
+	AlphaHeader = { fg = p.foreground },
+	AlphaButtons = { fg = p.textLinkForeground },
+	AlphaShortcut = { fg = p.number },
+	AlphaFooter = { fg = p.statusBarForeground, italic = true },
 
 	-- Lazy and mason floats reuse the menu.
 	LazyNormal = { link = "NormalFloat" },
