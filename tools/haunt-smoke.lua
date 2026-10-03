@@ -6,7 +6,9 @@ local haunt = require("spooky-scary.haunt")
 -- Capture terminal writes instead of emitting them.
 local written = {}
 vim.api.nvim_chan_send = function(_, s) written[#written + 1] = s end
-haunt.setup({ frequency = 3, graphics = "kitty" })
+local state_file = vim.fn.tempname()
+haunt.setup({ frequency = 3, graphics = "kitty", state_file = state_file })
+assert(haunt.is_enabled(), "enabled by default")
 local meta = dofile("assets/ghost/frames.lua")
 local frame_count = #meta.frames
 assert(frame_count >= 8, "expected the visible ghost frames")
@@ -26,7 +28,7 @@ assert(transmits == frame_count and places == frame_count and deletes == frame_c
 assert(all:find("\27_G", 1, true) and all:find("\27\\", 1, true), "APC framing")
 -- Text fallback: a float appears and goes away.
 written = {}
-haunt.setup({ frequency = 1, graphics = "text" })
+haunt.setup({ frequency = 1, graphics = "text", state_file = state_file })
 vim.api.nvim_exec_autocmds("InsertCharPre", {})
 local saw_float = false
 vim.wait(1500, function()
@@ -44,7 +46,7 @@ print("haunt smoke ok")
 -- Color selection: with the cursor on a Lua string the tint set differs from the plain-text one.
 written = {}
 vim.api.nvim_chan_send = function(_, s) written[#written + 1] = s end
-haunt.setup({ frequency = 1, graphics = "kitty" })
+haunt.setup({ frequency = 1, graphics = "kitty", state_file = state_file })
 vim.opt.rtp:prepend(vim.fn.expand("~/.local/share/nvim/lazy/nvim-treesitter"))
 vim.cmd("enew")
 vim.api.nvim_buf_set_lines(0, 0, -1, false, { "", "local greeting = 'boo'" })
@@ -63,3 +65,16 @@ local on_variable = table.concat(written):match("a=p,i=(%d+)")
 print(string.format("tint sets: string token -> id %s, variable token -> id %s", on_string, on_variable))
 assert(on_string and on_variable and math.floor(on_string / 100) ~= math.floor(on_variable / 100), "different tokens should pick different tint sets")
 print("color selection ok")
+
+-- Toggle persists: after :SpookyHauntDisable a fresh setup stays off, and keystrokes do nothing.
+vim.cmd("SpookyHauntDisable")
+assert(not haunt.is_enabled() and vim.fn.readfile(state_file)[1] == "off", "disable should persist off")
+haunt.setup({ frequency = 1, graphics = "kitty", state_file = state_file })
+assert(not haunt.is_enabled(), "persisted off should beat the enabled default")
+written = {}
+vim.api.nvim_exec_autocmds("InsertCharPre", {})
+vim.wait(300, function() return false end, 50)
+assert(#written == 0, "no ghost while disabled")
+vim.cmd("SpookyHauntToggle")
+assert(haunt.is_enabled() and vim.fn.readfile(state_file)[1] == "on", "toggle should persist on")
+print("toggle and persistence ok")

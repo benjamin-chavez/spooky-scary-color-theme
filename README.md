@@ -94,14 +94,19 @@ the one query predicate they use.
 
 ### The ghost
 
-The Power Mode ghost from above works in Neovim too, without Power Mode. Enable it after the
-colorscheme loads:
+The Power Mode ghost from above works in Neovim too, without Power Mode, and it is on as soon
+as the colorscheme loads. `:SpookyHauntToggle` turns it off or on and remembers the choice
+across sessions in Neovim's data directory; `:SpookyHauntEnable` and `:SpookyHauntDisable` do
+the same explicitly. To change its settings, call setup after the colorscheme:
 
 ```lua
 require("spooky-scary.haunt").setup({
   frequency = 20, -- keystrokes between hauntings, like powermode.explosions.frequency
 })
 ```
+
+Set `vim.g.spooky_scary_haunt = false` before loading the colorscheme if you never want it set
+up at all.
 
 Every twenty characters typed in insert mode, a small ghost rises out of the cursor line and
 vanishes, the way it does in the preview at the top of this README. Like Power Mode's mask

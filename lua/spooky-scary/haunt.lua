@@ -7,6 +7,8 @@ local M = {}
 local palette = require("spooky-scary.palette")
 
 local defaults = {
+  enabled = true, -- the persisted choice from :SpookyHauntToggle overrides this
+  state_file = vim.fn.stdpath("data") .. "/spooky-scary/haunt-enabled",
   frequency = 20,
   frame_ms = nil, -- defaults to the GIF's own timing from assets/ghost/frames.lua
   columns = 6, -- width of the image ghost in terminal cells; 6 by 2 keeps the frames' aspect
@@ -17,11 +19,13 @@ local defaults = {
 
 local state = {
   options = nil,
+  enabled = false,
   keystrokes = 0,
   playing = false,
   frames = nil,
   transmitted = false,
   augroup = nil,
+  commands_defined = false,
 }
 
 local asset_dir = vim.fs.normalize(vim.fs.dirname(debug.getinfo(1, "S").source:sub(2)) .. "/../../assets/ghost")
@@ -267,11 +271,29 @@ local function on_keystroke()
   end
 end
 
-function M.setup(options)
-  state.options = vim.tbl_deep_extend("force", defaults, options or {})
-  if state.augroup then
-    vim.api.nvim_del_augroup_by_id(state.augroup)
+-- The persisted choice is a one-line file holding "on" or "off"; absence means "use the option".
+local function read_persisted()
+  local file = io.open(state.options.state_file, "r")
+  if not file then
+    return nil
   end
+  local word = (file:read("*l") or ""):match("^%s*(%a+)")
+  file:close()
+  if word == "on" then return true end
+  if word == "off" then return false end
+  return nil
+end
+
+local function write_persisted(enabled)
+  vim.fn.mkdir(vim.fs.dirname(state.options.state_file), "p")
+  local file = io.open(state.options.state_file, "w")
+  if file then
+    file:write(enabled and "on\n" or "off\n")
+    file:close()
+  end
+end
+
+local function register_autocmds()
   state.augroup = vim.api.nvim_create_augroup("SpookyScaryHaunt", { clear = true })
   vim.api.nvim_create_autocmd("InsertCharPre", { group = state.augroup, callback = on_keystroke })
   vim.api.nvim_create_autocmd("VimLeavePre", {
@@ -282,15 +304,70 @@ function M.setup(options)
       end
     end,
   })
-  vim.api.nvim_create_user_command("SpookyHaunt", M.haunt, { desc = "Summon the ghost now" })
+end
+
+local function clear_autocmds()
+  if state.augroup then
+    pcall(vim.api.nvim_del_augroup_by_id, state.augroup)
+    state.augroup = nil
+  end
+end
+
+local function apply(enabled, persist)
+  state.enabled = enabled
+  clear_autocmds()
+  if enabled then
+    register_autocmds()
+  end
+  if persist then
+    write_persisted(enabled)
+  end
+end
+
+function M.enable()
+  apply(true, true)
+  vim.notify("Spooky ghost: on", vim.log.levels.INFO)
 end
 
 function M.disable()
-  if state.augroup then
-    vim.api.nvim_del_augroup_by_id(state.augroup)
-    state.augroup = nil
+  apply(false, true)
+  vim.notify("Spooky ghost: off", vim.log.levels.INFO)
+end
+
+function M.toggle()
+  if state.enabled then
+    M.disable()
+  else
+    M.enable()
   end
-  pcall(vim.api.nvim_del_user_command, "SpookyHaunt")
+end
+
+function M.is_enabled()
+  return state.enabled
+end
+
+local function define_commands()
+  if state.commands_defined then
+    return
+  end
+  state.commands_defined = true
+  vim.api.nvim_create_user_command("SpookyHaunt", M.haunt, { desc = "Summon the ghost now" })
+  vim.api.nvim_create_user_command("SpookyHauntToggle", M.toggle, { desc = "Toggle the ghost and remember the choice" })
+  vim.api.nvim_create_user_command("SpookyHauntEnable", M.enable, { desc = "Turn the ghost on and remember the choice" })
+  vim.api.nvim_create_user_command("SpookyHauntDisable", M.disable, { desc = "Turn the ghost off and remember the choice" })
+end
+
+-- Called by the colorscheme on load with no options, and again by user config with options.
+-- A persisted on/off choice always wins over the `enabled` option.
+function M.setup(options)
+  state.options = vim.tbl_deep_extend("force", defaults, options or {})
+  define_commands()
+  local persisted = read_persisted()
+  local enabled = state.options.enabled
+  if persisted ~= nil then
+    enabled = persisted
+  end
+  apply(enabled, false)
 end
 
 return M

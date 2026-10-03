@@ -19,6 +19,12 @@ function M.load()
   apply(require("spooky-scary.groups.syntax"))
   apply(require("spooky-scary.groups.treesitter"))
   apply(require("spooky-scary.groups.plugins"))
+
+  -- The ghost is on by default. Set vim.g.spooky_scary_haunt = false before loading the
+  -- colorscheme to never set it up; :SpookyHauntToggle turns it off and remembers that.
+  if vim.g.spooky_scary_haunt ~= false then
+    require("spooky-scary.haunt").setup()
+  end
 end
 
 return M
